@@ -15,7 +15,6 @@ export const BOOT_LINES = [
   { text: "", delay: 100 },
   { text: '> type "start" to begin conversation', delay: 0 },
   { text: '> type "game" to play dino runner', delay: 0 },
-  { text: '> type "login" for admin access', delay: 0 },
 ];
 
 export const SESSION_STATUS_LABELS: Record<string, string> = {
