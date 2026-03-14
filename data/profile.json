@@ -1,0 +1,109 @@
+[
+  {
+    "company": "Clinivise",
+    "role": "Founding Engineer",
+    "location": "California, United States",
+    "type": "Startup",
+    "summary": "Worked on products and workflows related to healthcare data, automation, and internal platform development.",
+    "focus": [
+      "healthcare analytics",
+      "browser automation",
+      "workflow tooling",
+      "operational systems",
+      "internal platform development"
+    ],
+    "highlights": [
+      "Built systems around healthcare data and operational workflows",
+      "Worked on analytics and automation for high-friction real-world processes",
+      "Contributed across product, engineering, and internal platform layers"
+    ],
+    "stack": [
+      "Python",
+      "TypeScript",
+      "Supabase",
+      "PostgreSQL",
+      "Snowflake",
+      "AWS",
+      "Playwright"
+    ],
+    "why_it_matters": "This role reflects my interest in applying engineering and AI to operationally complex real-world domains, especially where data, workflows, and automation intersect."
+  },
+  {
+    "company": "Acts4Unity Foundation",
+    "role": "AI-focused Engineering Contributor",
+    "location": "United States",
+    "type": "Foundation / Applied AI",
+    "summary": "Worked on projects involving applied artificial intelligence and intelligent software workflows.",
+    "focus": [
+      "applied AI",
+      "intelligent workflows",
+      "AI-assisted systems",
+      "experimentation"
+    ],
+    "highlights": [
+      "Contributed to AI-centered product and workflow ideas",
+      "Explored intelligent software patterns beyond traditional CRUD apps",
+      "Shifted more deeply toward AI-native product thinking"
+    ],
+    "stack": [
+      "Python",
+      "LLM APIs",
+      "automation tooling"
+    ],
+    "why_it_matters": "This phase marked a stronger shift from conventional application development toward AI-assisted systems and automation-driven product design."
+  },
+  {
+    "company": "ITSC, University of Cincinnati",
+    "role": "Software Developer / Full-Stack Contributor",
+    "location": "Cincinnati, Ohio, United States",
+    "type": "Institutional Engineering",
+    "summary": "Worked on platform development and internal engineering systems intended for operational use.",
+    "focus": [
+      "platform development",
+      "internal tools",
+      "full-stack development",
+      "software ownership"
+    ],
+    "highlights": [
+      "Built practical systems intended for real operational use",
+      "Worked across user-facing and internal engineering workflows",
+      "Strengthened product thinking and execution discipline"
+    ],
+    "stack": [
+      "React",
+      "Node.js",
+      "TypeScript",
+      "Prisma",
+      "AWS"
+    ],
+    "why_it_matters": "This role helped me grow in structured full-stack engineering, product ownership, and building systems meant to be used in real environments."
+  },
+  {
+    "company": "SOTI India Private Limited",
+    "role": "Associate Software Developer",
+    "location": "India",
+    "type": "Enterprise Software",
+    "summary": "Contributed to enterprise application development across frontend and backend systems.",
+    "focus": [
+      "enterprise application development",
+      "approval workflows",
+      "dynamic UI components",
+      "internal business tooling"
+    ],
+    "highlights": [
+      "Worked with Angular, JavaScript, C#, .NET, and SQL",
+      "Built approval workflows and dynamic UI behavior",
+      "Handled integration across frontend, backend, and data layers",
+      "Worked with AWS S3 integration and internal product functionality"
+    ],
+    "stack": [
+      "Angular",
+      "JavaScript",
+      "C#",
+      ".NET",
+      "SQL",
+      "AWS S3"
+    ],
+    "why_it_matters": "This role gave me a strong base in full-stack product development, enterprise workflows, and shipping end-to-end features across multiple layers."
+  }
+]

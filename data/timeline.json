@@ -1,0 +1,42 @@
+[
+  {
+    "period": "Early foundation",
+    "title": "Growing up in India",
+    "summary": "Developed an early interest in technology, structured problem-solving, and building systems."
+  },
+  {
+    "period": "Education",
+    "title": "Vellore Institute of Technology",
+    "summary": "Built a strong foundation in software engineering and analytical thinking."
+  },
+  {
+    "period": "Career foundation",
+    "title": "SOTI India Private Limited",
+    "summary": "Worked on enterprise full-stack systems across frontend, backend, workflows, and data."
+  },
+  {
+    "period": "Higher education",
+    "title": "University of Cincinnati",
+    "summary": "Pursued a Master's in Information Technology and expanded from software development into product building, AI, and automation."
+  },
+  {
+    "period": "Platform engineering",
+    "title": "ITSC, University of Cincinnati",
+    "summary": "Worked on internal platform development and practical operational systems."
+  },
+  {
+    "period": "AI shift",
+    "title": "Acts4Unity Foundation",
+    "summary": "Moved deeper into applied AI, intelligent workflows, and AI-native product thinking."
+  },
+  {
+    "period": "0→1 real-world systems",
+    "title": "Clinivise",
+    "summary": "Worked on healthcare analytics, browser automation, and operational platform tooling."
+  },
+  {
+    "period": "Current direction",
+    "title": "AI products, agents, and interactive software",
+    "summary": "Focused on building practical AI systems, automation workflows, and products that feel alive and useful."
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "id": "soti",
+    "company": "SOTI Inc.",
+    "role": "Software Developer",
+    "period": "",
+    "location": "",
+    "summary": "Worked on enterprise mobility management solutions, building and maintaining large-scale web applications.",
+    "highlights": [
+      "Built and maintained enterprise-grade web applications",
+      "Worked with Angular, TypeScript, and .NET stack",
+      "Contributed to product features used by enterprise clients globally"
+    ],
+    "stack": ["Angular", "TypeScript", ".NET", "SQL Server"]
+  },
+  {
+    "id": "itsc",
+    "company": "IT Service Center, University of Cincinnati",
+    "role": "Student Developer / IT Support",
+    "period": "",
+    "location": "Cincinnati, OH",
+    "summary": "Provided technical support and built internal tools for the university IT infrastructure.",
+    "highlights": [
+      "Developed internal tools and dashboards",
+      "Supported university IT systems and infrastructure"
+    ],
+    "stack": ["JavaScript", "Python", "SQL"]
+  }
+]

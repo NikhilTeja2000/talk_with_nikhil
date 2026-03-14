@@ -1,0 +1,116 @@
+[
+  {
+    "name": "Talk with Nikhil",
+    "category": "AI Portfolio / Live Agent",
+    "status": "In Progress",
+    "one_liner": "A real-time AI portfolio where people can talk to an interactive version of me.",
+    "problem": "Traditional portfolios are static and make it hard for people to explore someone's work, story, and thinking naturally.",
+    "solution": "Build a live, interruptible AI experience that lets users speak with an AI version of me in a terminal-style interface.",
+    "focus_areas": [
+      "real-time voice interaction",
+      "AI portfolio experience",
+      "retrieval-augmented generation",
+      "personal knowledge systems"
+    ],
+    "stack": [
+      "Next.js",
+      "TypeScript",
+      "Python",
+      "FastAPI",
+      "Google ADK",
+      "Gemini Live API",
+      "Supabase"
+    ],
+    "why_it_matters": "This project combines my interests in AI agents, interactive digital experiences, product storytelling, and systems that feel alive rather than static."
+  },
+  {
+    "name": "ReminoVerse",
+    "category": "AI Voice / Memory Experience",
+    "status": "Exploratory / Product Concept",
+    "one_liner": "A platform centered on AI voice memories and conversational memory interaction.",
+    "problem": "Memories and emotional moments are usually stored in static formats that do not feel interactive or alive.",
+    "solution": "Create a product where users can interact with voice-based memories in a personal and conversational way.",
+    "stack": [
+      "React",
+      "Gemini API",
+      "Supabase",
+      "Tavus",
+      "ElevenLabs"
+    ],
+    "why_it_matters": "It reflects my interest in emotional technology, voice interfaces, and more human-feeling digital products."
+  },
+  {
+    "name": "VeriAssess",
+    "category": "Trust / Hiring Infrastructure",
+    "status": "Startup Concept / Product Build",
+    "one_liner": "A platform for verified in-person assessment rooms to support fairer hiring processes.",
+    "problem": "Remote technical evaluation can suffer from trust, identity, and verification issues.",
+    "solution": "Create a system for verified assessment environments that bring more reliability and trust into hiring workflows.",
+    "stack": [
+      "React",
+      "Node.js",
+      "Supabase",
+      "workflow design"
+    ],
+    "why_it_matters": "This project reflects my interest in verification systems, real-world trust infrastructure, and product ideas that address genuine operational problems."
+  },
+  {
+    "name": "Self-Interview AI",
+    "category": "AI Learning / Interview Practice",
+    "status": "Built",
+    "one_liner": "A practice interview platform with real-time AI feedback.",
+    "problem": "Candidates often lack realistic feedback loops when practicing for interviews.",
+    "solution": "Build an AI-assisted interview practice platform with generated questions and feedback.",
+    "stack": [
+      "React",
+      "Firebase",
+      "Gemini API",
+      "AssemblyAI"
+    ],
+    "why_it_matters": "It reflects my recurring interest in learning tools, AI feedback systems, and practical user-facing AI applications."
+  },
+  {
+    "name": "Inbox of Broken Dreams",
+    "category": "Workflow Automation / AI Classification",
+    "status": "Built / Conceptual Expansion",
+    "one_liner": "A tool that classifies Gmail job application outcomes like ghosted, interview, or rejected.",
+    "problem": "Job application inboxes become noisy and emotionally messy, making tracking difficult.",
+    "solution": "Use AI-assisted classification and workflow automation to organize job outcomes into meaningful categories.",
+    "stack": [
+      "React",
+      "Node.js",
+      "Gmail API",
+      "Gemini API"
+    ],
+    "why_it_matters": "This project reflects my habit of building around everyday friction points and converting them into useful systems."
+  },
+  {
+    "name": "IsThisRealJob",
+    "category": "Trust / Scam Detection",
+    "status": "Concept",
+    "one_liner": "A trust-oriented system for evaluating job postings.",
+    "problem": "Job seekers often face uncertainty and scams when reading unfamiliar postings.",
+    "solution": "Create a scoring-based system that evaluates signals of trust and legitimacy.",
+    "stack": [
+      "AI evaluation logic",
+      "signal scoring",
+      "web product design"
+    ],
+    "why_it_matters": "It reflects my interest in trust, verification, and helping people make better decisions under uncertainty."
+  },
+  {
+    "name": "AI YouTube Agent",
+    "category": "Automation Pipeline",
+    "status": "Concept / Automation Project",
+    "one_liner": "An automated flow connecting structured input, prompt generation, AI content processing, and YouTube upload.",
+    "problem": "Content workflows involve repetitive steps across planning, generation, and publishing.",
+    "solution": "Automate the pipeline from input to upload using AI-assisted orchestration.",
+    "stack": [
+      "Sheets-based input",
+      "Gemini",
+      "automation workflows",
+      "YouTube integration"
+    ],
+    "why_it_matters": "It reflects my interest in end-to-end automation pipelines that reduce manual work and connect multiple systems together."
+  }
+]

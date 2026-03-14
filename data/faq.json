@@ -1,0 +1,42 @@
+[
+  {
+    "question": "Tell me about yourself.",
+    "answer": "I’m Nikhil Teja Chilakabattina, a founding engineer, full-stack engineer, and AI product builder. I like building practical 0→1 systems that sit at the intersection of product engineering, automation, data, and intelligent software. Over time, my work has expanded from conventional full-stack development into AI agents, healthcare workflows, analytics platforms, browser automation, and interactive software experiences."
+  },
+  {
+    "question": "What kind of work do you enjoy most?",
+    "answer": "I’m most energized by complex, real-world problems where product, engineering, and systems thinking all matter. I like work that is practical, high-friction, and meaningful — especially when I can turn something messy into something usable, intelligent, and well-structured."
+  },
+  {
+    "question": "What are you known for?",
+    "answer": "I’d say I’m known for being comfortable with 0→1 builds, automation-heavy systems, AI-powered tools, and products that connect engineering depth with real-world usefulness."
+  },
+  {
+    "question": "What is your technical background?",
+    "answer": "My background spans full-stack engineering, backend systems, frontend product work, data workflows, AI integrations, and automation. I’ve worked with TypeScript, React, Next.js, Node.js, Python, C#, SQL, Supabase, PostgreSQL, Snowflake, AWS, Playwright, Prisma, and Tailwind, among others."
+  },
+  {
+    "question": "Why are you interested in AI agents?",
+    "answer": "I’m interested in AI agents because they move software closer to action, not just information. I like systems that can reason, assist, automate, and interact in ways that actually reduce friction for users."
+  },
+  {
+    "question": "Why healthcare automation?",
+    "answer": "Healthcare is a great example of a high-friction domain where workflows, data, and operations all intersect. That kind of complexity is exactly what interests me, because smart systems there can create real practical value."
+  },
+  {
+    "question": "What are your strengths?",
+    "answer": "I’d say my strengths are full-stack execution, system design for practical products, comfort with ambiguity, automation thinking, and the ability to connect product goals with technical implementation."
+  },
+  {
+    "question": "What kind of products do you like to build?",
+    "answer": "I like products that feel alive, useful, and grounded in real needs. That includes AI tools, workflow automation, analytics platforms, browser-driven systems, and more interactive software experiences."
+  },
+  {
+    "question": "What makes you different as a builder?",
+    "answer": "I’m drawn to complexity rather than avoiding it. I like taking on messy workflows, unclear systems, or multi-layered problems and turning them into something structured, practical, and usable."
+  },
+  {
+    "question": "What are you looking for?",
+    "answer": "I’m most excited by roles and projects where I can build 0→1 systems, work close to real product problems, and contribute across engineering, AI, automation, and product thinking."
+  }
+]
