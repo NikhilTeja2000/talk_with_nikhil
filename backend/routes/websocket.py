@@ -17,6 +17,13 @@ async def websocket_live(ws: WebSocket):
     await ws.accept()
     session_id: str | None = None
 
+    user_agent = ""
+    ip_address = ""
+    for header_name, header_value in ws.headers.items():
+        if header_name.lower() == "user-agent":
+            user_agent = header_value
+    ip_address = ws.client.host if ws.client else ""
+
     try:
         while True:
             raw = await ws.receive_text()
@@ -29,7 +36,10 @@ async def websocket_live(ws: WebSocket):
             event_type = message.get("type", "")
 
             if event_type == "session.start":
-                state = await live_session_manager.create_session()
+                state = await live_session_manager.create_session(
+                    user_agent=user_agent,
+                    ip_address=ip_address,
+                )
                 session_id = state.session_id
                 await ws.send_json({
                     "type": "session.ready",

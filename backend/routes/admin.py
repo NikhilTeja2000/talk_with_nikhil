@@ -8,6 +8,7 @@ from pydantic import BaseModel
 
 from routes.auth import require_admin
 from storage.supabase_client import get_supabase
+from retrieval.chunk_builder import rebuild_all
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/admin", tags=["admin"])
@@ -229,12 +230,12 @@ async def apply_knowledge_update(
     update_id: str,
     _user: dict = Depends(require_admin),
 ):
-    """Mark a knowledge update as applied (after manually adding to knowledge base)."""
+    """Apply a knowledge update: insert into the target source table as a new FAQ, then rebuild chunks."""
     db = get_supabase()
 
     update = (
         db.table("knowledge_updates")
-        .select("*")
+        .select("*, question_events(user_question)")
         .eq("id", update_id)
         .single()
         .execute()
@@ -242,10 +243,45 @@ async def apply_knowledge_update(
     if not update.data:
         raise HTTPException(status_code=404, detail="Update not found")
 
+    data = update.data
+    target = data.get("target_table", "faqs")
+    admin_answer = data.get("admin_answer", "")
+    topic = data.get("topic", "")
+    question_text = ""
+    if data.get("question_events") and isinstance(data["question_events"], dict):
+        question_text = data["question_events"].get("user_question", "")
+
+    if target == "faqs" and question_text:
+        slug = question_text.lower().replace(" ", "-")[:50].rstrip("-")
+        db.table("faqs").insert({
+            "slug": f"auto-{slug}",
+            "question": question_text,
+            "answer": admin_answer,
+            "topic": topic or "general",
+        }).execute()
+        logger.info(f"Inserted new FAQ from knowledge update {update_id}")
+
     db.table("knowledge_updates").update({
         "status": "applied",
         "applied_at": "now()",
     }).eq("id", update_id).execute()
 
-    logger.info(f"Knowledge update {update_id} applied")
+    try:
+        chunk_count = rebuild_all(db)
+        logger.info(f"Knowledge chunks rebuilt: {chunk_count}")
+    except Exception as e:
+        logger.error(f"Failed to rebuild chunks after applying update: {e}")
+
     return {"status": "applied", "update_id": update_id}
+
+
+@router.post("/rebuild-chunks")
+async def trigger_rebuild_chunks(_user: dict = Depends(require_admin)):
+    """Manually trigger a rebuild of all knowledge chunks."""
+    db = get_supabase()
+    try:
+        count = rebuild_all(db)
+        return {"status": "ok", "chunks_rebuilt": count}
+    except Exception as e:
+        logger.error(f"Chunk rebuild failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))

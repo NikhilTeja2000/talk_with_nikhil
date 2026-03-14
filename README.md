@@ -4,13 +4,14 @@ A real-time AI portfolio built with Google ADK and Gemini Live. It opens like a 
 
 ## Features
 
-- Terminal-style boot UX
+- Terminal-style boot UX with `start`, `game`, and `login` commands
 - Live voice conversation with interruption support
 - Transcript console with speaker states
-- Nikhil-specific retrieval over projects, experience, and stories
+- Retrieval-augmented responses over Supabase knowledge base
 - Audio-reactive waveform visuals
 - Text chat fallback
-- Google Cloud-ready deployment
+- Admin dashboard with session monitoring, gap detection, and knowledge updates
+- Conversation Learning Loop for continuous improvement
 
 ## Tech Stack
 
@@ -18,8 +19,9 @@ A real-time AI portfolio built with Google ADK and Gemini Live. It opens like a 
 |-------|-------|
 | Frontend | Next.js 15, React, TypeScript, Tailwind CSS, Framer Motion, Web Audio API, Zustand |
 | Backend | Python 3.11+, FastAPI, Google ADK, Gemini Live API, WebSocket |
-| Data | JSON + Markdown knowledge base, keyword retrieval with scoring |
-| Deploy | Docker, Google Cloud Run, Vercel/Firebase Hosting |
+| Database | Supabase (PostgreSQL), pgvector, pg_trgm |
+| Auth | Supabase Auth (JWT) |
+| Deploy | Docker, Google Cloud Run, Vercel |
 
 ## Quick Start
 
@@ -29,7 +31,7 @@ A real-time AI portfolio built with Google ADK and Gemini Live. It opens like a 
 git clone <repo-url>
 cd talk-with-nikhil
 cp .env.example .env
-# fill in your Google Cloud credentials in .env
+# Fill in Google Cloud, Supabase URL/keys in .env
 ```
 
 ### 2. Install everything
@@ -38,27 +40,29 @@ cp .env.example .env
 make install
 ```
 
-This creates the Python venv, installs pip deps, and installs npm deps — one command.
+### 3. Set up Supabase
 
-### 3. Run both servers
+Apply the migrations in `backend/supabase/migrations/` to your Supabase project, then seed the data:
+
+```bash
+cd backend
+source .venv/bin/activate
+python scripts/rebuild_chunks.py
+```
+
+### 4. Create admin user
+
+```bash
+python scripts/create_admin.py --email your@email.com --password YourPassword
+```
+
+### 5. Run both servers
 
 ```bash
 make dev
 ```
 
 Frontend on `http://localhost:3000`, backend on `http://localhost:8000`.
-
-### 4. Fill in your data
-
-Edit these files with your real info:
-
-- `data/profile.json`
-- `data/experience.json`
-- `data/projects.json`
-- `data/timeline.json`
-- `data/faq.json`
-- `data/links.json`
-- `data/stories/*.md`
 
 ## Available Commands
 
@@ -75,22 +79,61 @@ Edit these files with your real info:
 
 ```
 talk-with-nikhil/
-├── Makefile              # root orchestration
-├── backend/              # Python + FastAPI + ADK agent
-│   ├── agent/            # ADK root agent, tools, instructions
-│   ├── retrieval/        # knowledge base loader + search
-│   ├── routes/           # health, session, websocket endpoints
-│   ├── prompts/          # persona definition
-│   └── memory/           # session state store
-├── frontend/             # Next.js + React + Tailwind
-│   ├── app/              # pages (boot + talk)
-│   ├── components/       # UI components
-│   ├── hooks/            # mic, audio analyzer, live session
-│   └── lib/              # types, store, websocket client, api
-├── data/                 # knowledge base (JSON + Markdown)
+├── Makefile                  # root orchestration
+├── .env.example              # environment variable template
+├── docker-compose.yml        # container setup
+│
+├── backend/
+│   ├── main.py               # FastAPI entrypoint
+│   ├── config.py             # Pydantic settings (Google Cloud, Supabase)
+│   ├── agent/                # ADK root agent, tools, instructions
+│   │   ├── root_agent.py     # Gemini agent with persona + 5 tools
+│   │   ├── live_session.py   # session lifecycle + Supabase persistence
+│   │   ├── instructions.py   # persona loader + context builder
+│   │   └── tools/            # search, projects, experience, timeline, links
+│   ├── retrieval/            # Supabase-backed knowledge search
+│   │   ├── search.py         # keyword search over knowledge_chunks table
+│   │   └── chunk_builder.py  # builds chunks from source tables
+│   ├── evaluation/           # answer quality evaluation
+│   │   └── gap_detector.py   # flags weak/missing answers
+│   ├── storage/              # Supabase clients + conversation persistence
+│   │   ├── supabase_client.py
+│   │   └── conversation_store.py
+│   ├── routes/               # API endpoints
+│   │   ├── health.py         # health check
+│   │   ├── session.py        # session create/end
+│   │   ├── websocket.py      # live WebSocket handler
+│   │   ├── auth.py           # admin login/refresh/me
+│   │   └── admin.py          # dashboard API (sessions, flagged, profile, stats)
+│   ├── prompts/persona.md    # agent personality definition
+│   ├── scripts/              # one-time setup scripts
+│   │   ├── create_admin.py
+│   │   └── rebuild_chunks.py
+│   └── supabase/migrations/  # SQL migration files
+│
+├── frontend/
+│   ├── app/
+│   │   ├── page.tsx          # boot terminal (start/game/login)
+│   │   ├── talk/page.tsx     # live conversation page
+│   │   ├── admin/page.tsx    # admin dashboard
+│   │   └── game/page.tsx     # dino runner game
+│   ├── components/           # UI components + admin components
+│   ├── hooks/                # useMicInput, useAudioAnalyzer, useLiveSession
+│   └── lib/                  # api, stores, types, websocket client
+│
+├── data/                     # source knowledge (JSON + Markdown)
 │   ├── profile.json
 │   ├── experience.json
 │   ├── projects.json
-│   └── stories/
-└── scripts/              # dev helpers
+│   ├── faq.json
+│   ├── timeline.json
+│   ├── links.json
+│   └── stories/*.md
+│
+└── docs/
+    └── architecture.md       # living architecture document
 ```
+
+## Architecture
+
+See [docs/architecture.md](docs/architecture.md) for the full system architecture.
