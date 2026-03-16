@@ -198,16 +198,40 @@ ALLOWED_ORIGIN=http://localhost:3000
 
 ```mermaid
 flowchart LR
-  U[User] -->|Mic audio| FE[Frontend (Next.js)\nuseVoiceSession + AudioWorklet]
-  FE -->|PCM16 @16kHz\nWebSocket /ws/voice| BE[Backend (FastAPI)\nvoice bridge]
-  BE -->|Gemini Live stream\n(RealtimeInput)| G[Vertex AI Gemini Live\n gemini-live-2.5-flash-native-audio]
-  G -->|PCM16 @24kHz audio\n+ transcriptions| BE
-  BE -->|audio.chunk + transcript.final| FE
-  FE -->|Play audio| U
+  U[User] -->|mic audio + UI| FE[Frontend\nNext.js on Vercel]
 
-  G -->|Function calls| TOOLS[Tool bridge\nsearch/get_project/get_experience/...]
-  TOOLS -->|Query| SB[(Supabase Postgres)\nknowledge_chunks + source tables]
-  SB -->|Results| TOOLS -->|Tool response| G
+  subgraph Frontend["Frontend (Browser)"]
+    FE -->|getUserMedia + AudioWorklet| AW[AudioWorklet\nPCM16 @16kHz]
+    FE -->|WebSocket /ws/voice\nwss://talk-with-nikhil-api...| CR[Cloud Run\nFastAPI backend]
+  end
 
-  BE -->|Persist| SB2[(Supabase Postgres)\nsessions + transcript_messages\nquestion_events + knowledge_updates]
+  subgraph Backend["Backend on Google Cloud Run"]
+    CR -->|Google GenAI SDK\nrealtime client| VA[Vertex AI\nGemini Live]
+    CR -->|REST + RPC| SB[(Supabase\nPostgres DB)]
+  end
+
+  subgraph VertexAI["Google Cloud Vertex AI"]
+    VA -->|model: gemini-live-2.5-flash-native-audio\n(real-time audio in/out)| LIVE[Gemini Live Session]
+    VA -->|model: gemini-2.5-flash\n(tool + text calls)| TEXT[Gemini Text Tools]
+  end
+
+  AW -->|PCM chunks| CR
+  CR -->|audio.stream_request| LIVE
+  LIVE -->|audio + transcripts\nstreamed back| CR
+  CR -->|audio.chunk + transcript.final| FE
+  FE -->|play audio reply| U
+
+  LIVE -->|function_call| TEXT
+  TEXT -->|tools: search_about_nikhil,\nget_project_details,\nget_preferences...| CR
+  CR -->|SQL queries| SB
+  SB -->|facts / rows| CR
+  CR -->|tool_response| TEXT --> LIVE
+
+  CR -->|persist session| SB2[(Supabase Postgres)\nsessions + transcript_messages\nquestion_events + knowledge_updates]
+
+  classDef gcloud fill:#003f5c,stroke:#ffffff,color:#ffffff;
+  classDef gemini fill:#58508d,stroke:#ffffff,color:#ffffff;
+
+  class CR,SB,SB2 gcloud;
+  class VA,LIVE,TEXT gemini;
 ```
