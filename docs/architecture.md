@@ -195,42 +195,32 @@ ALLOWED_ORIGIN=http://localhost:3000
 ```
 
 ## Architecture Diagram (Mermaid)
-
 flowchart LR
-  U[User] -->|mic audio and UI| FE[Frontend<br/>Next.js on Vercel]
+  U[User] -->|mic audio and UI| FE[Frontend<br/>Next.js]
 
-  subgraph Frontend["Frontend (Browser)"]
-    FE -->|getUserMedia and AudioWorklet| AW[AudioWorklet<br/>PCM16 at 16kHz]
-    FE -->|WebSocket /ws/voice| CR[Cloud Run<br/>FastAPI backend]
+  subgraph Frontend["Browser"]
+    FE -->|getUserMedia and AudioWorklet| AW[Audio capture<br/>PCM16 16kHz]
+    FE -->|WebSocket /ws/voice| CR[FastAPI backend<br/>Cloud Run]
   end
 
-  subgraph Backend["Backend on Google Cloud Run"]
-    CR -->|Google GenAI SDK realtime client| VA[Vertex AI<br/>Gemini Live]
-    CR -->|REST and RPC| SB[(Supabase<br/>Postgres DB)]
+  subgraph Backend["Google Cloud Run"]
+    CR -->|realtime session| LIVE[Gemini Live<br/>native audio model]
+    CR -->|tool calls and persistence| SB[(Supabase<br/>Postgres)]
   end
 
-  subgraph VertexAI["Google Cloud Vertex AI"]
-    VA -->|gemini-live-2.5-flash-native-audio| LIVE[Gemini Live Session<br/>real-time audio in and out]
-    VA -->|gemini-2.5-flash| TEXT[Gemini Text Tools<br/>tool and text calls]
+  subgraph Model["Google AI Layer"]
+    LIVE
   end
 
-  AW -->|PCM chunks| CR
-  CR -->|audio stream request| LIVE
-  LIVE -->|audio and transcripts streamed back| CR
-  CR -->|audio chunks and final transcript| FE
-  FE -->|play audio reply| U
+  AW -->|audio chunks| CR
+  CR -->|stream audio| LIVE
+  LIVE -->|audio reply and transcript events| CR
+  CR -->|audio and transcript updates| FE
+  FE -->|play reply| U
 
-  LIVE -->|function call| TEXT
-  TEXT -->|tool request| CR
-  CR -->|SQL queries| SB
-  SB -->|facts and rows| CR
-  CR -->|tool response| TEXT
-  TEXT -->|return context| LIVE
+  LIVE -->|function call| CR
+  CR -->|search_about_nikhil / get_project_details / get_links| SB
+  SB -->|retrieved facts| CR
+  CR -->|tool response| LIVE
 
-  CR -->|persist session| SB2[(Supabase Postgres<br/>sessions, transcript_messages,<br/>question_events, knowledge_updates)]
-
-  classDef gcloud fill:#003f5c,stroke:#ffffff,color:#ffffff;
-  classDef gemini fill:#58508d,stroke:#ffffff,color:#ffffff;
-
-  class CR,SB,SB2 gcloud;
-  class VA,LIVE,TEXT gemini;
+  CR -->|save session, transcript, question events, knowledge updates| SB
