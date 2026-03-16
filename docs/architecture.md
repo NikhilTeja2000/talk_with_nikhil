@@ -195,6 +195,7 @@ ALLOWED_ORIGIN=http://localhost:3000
 ```
 
 ## Architecture Diagram (Mermaid)
+```mermaid
 flowchart LR
   U[User] -->|mic audio and UI| FE[Frontend<br/>Next.js]
 
@@ -224,3 +225,4 @@ flowchart LR
   CR -->|tool response| LIVE
 
   CR -->|save session, transcript, question events, knowledge updates| SB
+  ```
