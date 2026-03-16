@@ -4,6 +4,9 @@ export const API_BASE_URL =
 export const WS_URL =
   process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:8000/ws/live";
 
+export const WS_VOICE_URL =
+  process.env.NEXT_PUBLIC_WS_VOICE_URL || "ws://localhost:8000/ws/voice";
+
 export const BOOT_LINES = [
   { text: "> initializing talk-with-nikhil v0.1.0...", delay: 400 },
   { text: "> loading profile...", delay: 300 },

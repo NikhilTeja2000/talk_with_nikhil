@@ -10,55 +10,36 @@ import VoiceCore from "@/components/VoiceCore";
 import ContextPanel from "@/components/ContextPanel";
 import CallControls from "@/components/CallControls";
 import TextInput from "@/components/TextInput";
-import { useLiveSession } from "@/hooks/useLiveSession";
-import { useMicInput } from "@/hooks/useMicInput";
-import { useAudioAnalyzer } from "@/hooks/useAudioAnalyzer";
+import { useVoiceSession } from "@/hooks/useVoiceSession";
 import { useAppStore } from "@/lib/store";
 
 export default function TalkPage() {
   const router = useRouter();
-  const { startSession, sendText, endSession, sessionState } =
-    useLiveSession();
-  const { stream, requestMic, stopMic, toggleMute } = useMicInput();
-  const analyzerData = useAudioAnalyzer(stream);
-  const isMuted = useAppStore((s) => s.isMuted);
-  const appToggleMute = useAppStore((s) => s.toggleMute);
+  const { startSession, sendText, endSession, sessionState, mute, unmute, isMuted } =
+    useVoiceSession();
   const reset = useAppStore((s) => s.reset);
   const [exiting, setExiting] = useState(false);
 
   useEffect(() => {
-    const init = async () => {
-      await requestMic();
-      await startSession();
-    };
-    init();
-
-    return () => {
-      stopMic();
-    };
+    startSession();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (sessionState === "ended" && !exiting) {
       setExiting(true);
-      stopMic();
       setTimeout(() => {
         reset();
         router.push("/");
       }, 1200);
     }
-  }, [sessionState, exiting, stopMic, reset, router]);
+  }, [sessionState, exiting, reset, router]);
 
-  const handleEnd = () => {
-    endSession();
-    stopMic();
-  };
+  const handleEnd = () => endSession();
 
   const handleToggleMute = () => {
-    const newMuted = !isMuted;
-    appToggleMute();
-    toggleMute(newMuted);
+    if (isMuted) unmute();
+    else mute();
   };
 
   const isLive =
@@ -99,12 +80,13 @@ export default function TalkPage() {
                 >
                   <div className="flex-1 flex items-center justify-center">
                     <VoiceCore
-                      timeDomain={analyzerData.timeDomain}
-                      frequency={analyzerData.frequency}
-                      intensity={analyzerData.intensity}
+                      timeDomain={[]}
+                      frequency={[]}
+                      intensity={0}
                     />
                   </div>
 
+                  {/* Text input as fallback — user can type if they prefer */}
                   {isLive && <TextInput onSend={sendText} />}
                 </motion.div>
 

@@ -22,8 +22,19 @@ function authedRequest<T>(path: string, token: string, options?: RequestInit): P
   });
 }
 
+export interface ReadinessCheck {
+  ready: boolean;
+  checks: {
+    gemini: { ok: boolean; method: string };
+    supabase: { ok: boolean };
+    knowledge_base: { ok: boolean; chunks?: number; error?: string };
+  };
+}
+
 export const api = {
   healthCheck: () => request<{ status: string }>("/health"),
+
+  readinessCheck: () => request<ReadinessCheck>("/readiness"),
 
   createSession: () =>
     request<{ session_id: string; status: string }>("/api/session/create", {

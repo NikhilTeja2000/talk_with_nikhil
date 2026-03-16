@@ -4,6 +4,15 @@ import logging
 import sys
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+_root_env = Path(__file__).resolve().parent.parent / ".env"
+_local_env = Path(__file__).resolve().parent / ".env"
+if _local_env.exists():
+    load_dotenv(_local_env)
+if _root_env.exists():
+    load_dotenv(_root_env, override=False)
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -15,6 +24,7 @@ from routes.session import router as session_router
 from routes.websocket import router as ws_router
 from routes.auth import router as auth_router
 from routes.admin import router as admin_router
+from routes.voice_websocket import router as voice_router
 
 logging.basicConfig(
     level=logging.INFO,
@@ -40,6 +50,7 @@ app.include_router(session_router)
 app.include_router(ws_router)
 app.include_router(auth_router)
 app.include_router(admin_router)
+app.include_router(voice_router)
 
 
 @app.on_event("startup")

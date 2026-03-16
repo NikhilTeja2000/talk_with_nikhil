@@ -124,7 +124,7 @@ async def get_session_detail(session_id: str, _user: dict = Depends(require_admi
 
 @router.get("/flagged")
 async def list_flagged_questions(
-    status: str = Query("open", regex="^(open|reviewed|resolved)$"),
+    status: str = Query("open", pattern="^(open|reviewed|resolved)$"),
     limit: int = Query(20, ge=1, le=100),
     offset: int = Query(0, ge=0),
     _user: dict = Depends(require_admin),
@@ -210,7 +210,7 @@ async def dashboard_stats(_user: dict = Depends(require_admin)):
 
 @router.get("/knowledge-updates")
 async def list_knowledge_updates(
-    status: str = Query("pending", regex="^(pending|applied|rejected)$"),
+    status: str = Query("pending", pattern="^(pending|applied|rejected)$"),
     _user: dict = Depends(require_admin),
 ):
     """List knowledge updates by status."""

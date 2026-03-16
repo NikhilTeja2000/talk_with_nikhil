@@ -51,9 +51,14 @@ export default function GamePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stateRef = useRef<GameState>(makeInitialState());
   const rafRef = useRef<number>(0);
+  const faahRef = useRef<HTMLAudioElement | null>(null);
   const [displayScore, setDisplayScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [started, setStarted] = useState(false);
+
+  useEffect(() => {
+    faahRef.current = new Audio("/faah.mp3");
+  }, []);
 
   const jump = useCallback(() => {
     const s = stateRef.current;
@@ -240,6 +245,10 @@ export default function GamePage() {
           ) {
             s.alive = false;
             setGameOver(true);
+            if (faahRef.current) {
+              faahRef.current.currentTime = 0;
+              faahRef.current.play();
+            }
             break;
           }
         }
