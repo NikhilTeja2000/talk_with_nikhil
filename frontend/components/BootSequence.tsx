@@ -72,7 +72,6 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
         addLine("", "info");
         addLine('> type "start" to begin', "cmd");
         addLine('> type "game" to play dino runner', "cmd");
-        addLine('> type "login" for admin access', "cmd");
       } else {
         addLine("", "info");
         addLine("> looks like nikhil has some issue with his voice...", "fail");
