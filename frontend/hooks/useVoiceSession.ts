@@ -11,7 +11,7 @@ function makeId() {
   return `v-${Date.now()}-${++entryCounter}`;
 }
 
-function toBase64(buffer: ArrayBuffer): string {
+function toBase64(buffer: ArrayBufferLike): string {
   let binary = "";
   const bytes = new Uint8Array(buffer);
   for (let i = 0; i < bytes.byteLength; i++) {

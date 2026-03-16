@@ -80,8 +80,8 @@ export default function TalkPage() {
                 >
                   <div className="flex-1 flex items-center justify-center">
                     <VoiceCore
-                      timeDomain={[]}
-                      frequency={[]}
+                      timeDomain={new Uint8Array(0)}
+                      frequency={new Uint8Array(0)}
                       intensity={0}
                     />
                   </div>
