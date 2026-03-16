@@ -70,6 +70,7 @@ Frontend on `http://localhost:3000`, backend on `http://localhost:8000`.
 - Voice model (Vertex AI): `gemini-live-2.5-flash-native-audio`
   - Input audio: raw PCM16 @ 16kHz
   - Output audio: raw PCM16 @ 24kHz
+  - Languages: supports multilingual conversations, with **24 languages** available for native audio output (HD voices)
 
 ## Available Commands
 

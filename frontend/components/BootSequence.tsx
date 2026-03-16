@@ -35,6 +35,14 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
       await delay(400);
       addLine("> syncing memories, projects, stories...", "info");
       await delay(500);
+      addLine("> loading languages: english, telugu... 0%", "info");
+      await delay(200);
+      addLine("> loading languages: english, telugu... 35%", "info");
+      await delay(250);
+      addLine("> loading languages: english, telugu... 72%", "info");
+      await delay(250);
+      addLine("> 24 languages loaded", "ok");
+      await delay(250);
 
       let readiness: ReadinessCheck | null = null;
       try {
