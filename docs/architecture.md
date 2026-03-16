@@ -196,42 +196,41 @@ ALLOWED_ORIGIN=http://localhost:3000
 
 ## Architecture Diagram (Mermaid)
 
-```mermaid
 flowchart LR
-  U[User] -->|mic audio + UI| FE[Frontend\nNext.js on Vercel]
+  U[User] -->|mic audio and UI| FE[Frontend<br/>Next.js on Vercel]
 
   subgraph Frontend["Frontend (Browser)"]
-    FE -->|getUserMedia + AudioWorklet| AW[AudioWorklet\nPCM16 @16kHz]
-    FE -->|WebSocket /ws/voice\nwss://talk-with-nikhil-api...| CR[Cloud Run\nFastAPI backend]
+    FE -->|getUserMedia and AudioWorklet| AW[AudioWorklet<br/>PCM16 at 16kHz]
+    FE -->|WebSocket /ws/voice| CR[Cloud Run<br/>FastAPI backend]
   end
 
   subgraph Backend["Backend on Google Cloud Run"]
-    CR -->|Google GenAI SDK\nrealtime client| VA[Vertex AI\nGemini Live]
-    CR -->|REST + RPC| SB[(Supabase\nPostgres DB)]
+    CR -->|Google GenAI SDK realtime client| VA[Vertex AI<br/>Gemini Live]
+    CR -->|REST and RPC| SB[(Supabase<br/>Postgres DB)]
   end
 
   subgraph VertexAI["Google Cloud Vertex AI"]
-    VA -->|model: gemini-live-2.5-flash-native-audio\n(real-time audio in/out)| LIVE[Gemini Live Session]
-    VA -->|model: gemini-2.5-flash\n(tool + text calls)| TEXT[Gemini Text Tools]
+    VA -->|gemini-live-2.5-flash-native-audio| LIVE[Gemini Live Session<br/>real-time audio in and out]
+    VA -->|gemini-2.5-flash| TEXT[Gemini Text Tools<br/>tool and text calls]
   end
 
   AW -->|PCM chunks| CR
-  CR -->|audio.stream_request| LIVE
-  LIVE -->|audio + transcripts\nstreamed back| CR
-  CR -->|audio.chunk + transcript.final| FE
+  CR -->|audio stream request| LIVE
+  LIVE -->|audio and transcripts streamed back| CR
+  CR -->|audio chunks and final transcript| FE
   FE -->|play audio reply| U
 
-  LIVE -->|function_call| TEXT
-  TEXT -->|tools: search_about_nikhil,\nget_project_details,\nget_preferences...| CR
+  LIVE -->|function call| TEXT
+  TEXT -->|tool request| CR
   CR -->|SQL queries| SB
-  SB -->|facts / rows| CR
-  CR -->|tool_response| TEXT --> LIVE
+  SB -->|facts and rows| CR
+  CR -->|tool response| TEXT
+  TEXT -->|return context| LIVE
 
-  CR -->|persist session| SB2[(Supabase Postgres)\nsessions + transcript_messages\nquestion_events + knowledge_updates]
+  CR -->|persist session| SB2[(Supabase Postgres<br/>sessions, transcript_messages,<br/>question_events, knowledge_updates)]
 
   classDef gcloud fill:#003f5c,stroke:#ffffff,color:#ffffff;
   classDef gemini fill:#58508d,stroke:#ffffff,color:#ffffff;
 
   class CR,SB,SB2 gcloud;
   class VA,LIVE,TEXT gemini;
-```
