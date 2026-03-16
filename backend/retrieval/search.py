@@ -43,6 +43,7 @@ class KnowledgeSearch:
         "profile": 1.1,
         "story": 1.0,
         "timeline": 0.9,
+        "preference": 0.9,
         "link": 0.5,
     }
 

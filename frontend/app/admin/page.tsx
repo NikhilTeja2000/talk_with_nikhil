@@ -77,7 +77,7 @@ export default function AdminPage() {
               key="dashboard"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="flex flex-col gap-6 flex-1"
+              className="flex flex-col gap-6 flex-1 min-h-0"
             >
               {/* Header */}
               <div className="flex justify-between items-center">
@@ -118,7 +118,7 @@ export default function AdminPage() {
               </div>
 
               {/* Tab Content */}
-              <div className="flex-1 overflow-y-auto">
+              <div className="flex-1 min-h-0 overflow-y-auto">
                 {tab === "overview" && <StatsCards stats={stats} />}
 
                 {tab === "sessions" && (

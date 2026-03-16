@@ -15,6 +15,7 @@ from agent.tools.get_project_details import get_project_details
 from agent.tools.get_experience_details import get_experience_details
 from agent.tools.get_timeline_event import get_timeline_event
 from agent.tools.get_links import get_links
+from agent.tools.get_preferences import get_preferences
 from config import settings
 from evaluation import retrieval_context
 from evaluation.gap_detector import gap_detector
@@ -28,6 +29,7 @@ TOOL_MAP = {
     "get_experience_details": get_experience_details,
     "get_timeline_event": get_timeline_event,
     "get_links": get_links,
+    "get_preferences": get_preferences,
 }
 
 
@@ -75,6 +77,15 @@ def _build_tool_declarations() -> list[types.Tool]:
             parameters=types.Schema(
                 type=types.Type.OBJECT,
                 properties={"query": types.Schema(type=types.Type.STRING, description="Type of link needed")},
+                required=["query"],
+            ),
+        ),
+        types.FunctionDeclaration(
+            name="get_preferences",
+            description="Get Nikhil's personal preferences (movies/anime/music/food/etc.) from his knowledge base.",
+            parameters=types.Schema(
+                type=types.Type.OBJECT,
+                properties={"query": types.Schema(type=types.Type.STRING, description="Preference category/topic to retrieve")},
                 required=["query"],
             ),
         ),

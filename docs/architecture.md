@@ -11,9 +11,10 @@ Next.js Frontend (port 3000)
    v
 FastAPI Backend (port 8000)
    |
-   +-- ADK Agent (Gemini Live)
+   +-- Voice Agent (Gemini Live API, native audio)
    |      |
-   |      +-- 5 retrieval tools
+   |      +-- /ws/voice (bidirectional audio + barge-in)
+   |      +-- 5 retrieval tools (function calling)
    |             |
    |             v
    |        KnowledgeSearch --> Supabase (knowledge_chunks)
@@ -36,26 +37,34 @@ Supabase (PostgreSQL)
 
 ### 1. Core Voice Experience
 
-The primary product. A user opens the terminal, types `start`, and enters a live conversation.
+The primary product. A user opens the terminal, types `start`, and enters a live, interruptible voice conversation.
 
 **Frontend flow:**
 - `page.tsx` (boot) --> `talk/page.tsx` (live session)
-- `useMicInput` captures audio
-- `useLiveSession` manages WebSocket connection
-- `useAudioAnalyzer` drives waveform visuals
+- `useVoiceSession` opens a WebSocket to `/ws/voice`
+- AudioWorklet captures mic audio and converts Float32 → Int16 PCM
+- Audio is resampled to the required rate before sending
+- `useAudioPlayer` decodes PCM audio chunks from Gemini and plays them via Web Audio
 - Zustand store manages session/speaker state
 
 **Backend flow:**
-- WebSocket at `/ws/live` receives `session.start`, `transcript.user`, `session.end`
-- `LiveSessionManager` creates an ADK `Runner` per session
-- `Runner.run_async()` sends text to Gemini, which may call retrieval tools
-- Responses stream back over WebSocket as `transcript.final`
+- WebSocket at `/ws/voice` bridges browser ↔ Gemini Live API
+- Backend forwards raw PCM input audio to Gemini Live
+- Gemini returns raw PCM output audio + transcription events
+- Backend persists sessions/transcripts and runs gap detection after each AI turn
 
-**ADK Agent:**
-- Model: `gemini-2.0-flash-live-001`
-- Persona: `backend/prompts/persona.md`
-- Tools: `search_about_nikhil`, `get_project_details`, `get_experience_details`, `get_timeline_event`, `get_links`
-- Session memory: `InMemorySessionService` (automatic conversation history within one session)
+**Gemini Live (native audio):**
+- Voice model: `gemini-live-2.5-flash-native-audio`
+- Persona + behavioral rules: `backend/prompts/persona.md` (system instruction)
+- Tool calling: `search_about_nikhil`, `get_project_details`, `get_experience_details`, `get_timeline_event`, `get_links`
+- Audio formats:
+  - Input: raw 16-bit PCM @ 16kHz, little-endian (`audio/pcm;rate=16000`)
+  - Output: raw 16-bit PCM @ 24kHz, little-endian
+
+**Interruptions / Barge-in (interruptible conversation):**
+- Gemini emits an `interrupted` signal when the user starts speaking while the model is speaking.
+- Backend prioritizes `interrupted` events and suppresses forwarding any “tail audio” from the interrupted response.
+- Frontend flushes queued audio immediately so the old answer stops and the new answer can play cleanly.
 
 ### 2. Knowledge & Retrieval
 
@@ -81,10 +90,10 @@ Every conversation is persisted to Supabase:
 - `transcript_messages` -- every user and AI message with timestamps
 - `question_events` -- per-question analytics (retrieval score, confidence, gap flags)
 
-Persistence is wired into `LiveSessionManager.process_text()`:
-1. User message saved to `transcript_messages`
+Persistence is wired into the voice session flow:
+1. User speech transcription saved to `transcript_messages`
 2. Turn count incremented
-3. AI response saved to `transcript_messages`
+3. AI response transcription saved to `transcript_messages`
 4. Gap detector evaluates and creates `question_events`
 
 ### 4. Gap Detection (Conversation Learning Loop)
@@ -131,6 +140,27 @@ Future layer for real-time admin notification:
 - Admin can reply with the answer
 - Reply is captured and processed as a knowledge update
 
+## V2 (Planned) Features
+
+These are intentionally **not required for the current hackathon demo**, but are the next upgrades.
+
+### Owner escalation via Telegram / WhatsApp (Human-in-the-loop)
+
+- When the agent flags a gap (low confidence / missing context), it can notify Nikhil on **Telegram** (or WhatsApp).
+- Nikhil replies with the correct answer.
+- The system stores that reply as a `knowledge_update` and optionally sends a follow-up to the user if the session is still active.
+
+### Preferences management UI (Admin)
+
+- We added a `preferences` table + retrieval tool (`get_preferences`) to ground “what do you like?” questions without guessing.
+- The dedicated **Preferences editor UI** is currently hidden to keep admin UX simple (4 tabs) for the demo.
+- In V2, it becomes a full admin section for editing preferences + one-click chunk rebuild.
+
+### Automated deployment (IaC / scripts)
+
+- Cloud Run deployment scripts or infrastructure-as-code (Terraform / Pulumi) for one-command backend deploy.
+- Vercel deployment automation (env sync + preview URLs) and a reproducible judge flow.
+
 ## Database Schema
 
 12 tables with Row Level Security:
@@ -157,6 +187,27 @@ SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_ANON_KEY=eyJ...
 SUPABASE_SERVICE_ROLE_KEY=eyJ...
 GOOGLE_CLOUD_PROJECT=your-project-id
-GEMINI_LIVE_MODEL=gemini-2.0-flash-live-001
+GOOGLE_CLOUD_LOCATION=us-central1
+GOOGLE_GENAI_USE_VERTEXAI=TRUE
+GEMINI_LIVE_MODEL=gemini-2.5-flash
+GEMINI_VOICE_MODEL=gemini-live-2.5-flash-native-audio
 ALLOWED_ORIGIN=http://localhost:3000
+```
+
+## Architecture Diagram (Mermaid)
+
+```mermaid
+flowchart LR
+  U[User] -->|Mic audio| FE[Frontend (Next.js)\nuseVoiceSession + AudioWorklet]
+  FE -->|PCM16 @16kHz\nWebSocket /ws/voice| BE[Backend (FastAPI)\nvoice bridge]
+  BE -->|Gemini Live stream\n(RealtimeInput)| G[Vertex AI Gemini Live\n gemini-live-2.5-flash-native-audio]
+  G -->|PCM16 @24kHz audio\n+ transcriptions| BE
+  BE -->|audio.chunk + transcript.final| FE
+  FE -->|Play audio| U
+
+  G -->|Function calls| TOOLS[Tool bridge\nsearch/get_project/get_experience/...]
+  TOOLS -->|Query| SB[(Supabase Postgres)\nknowledge_chunks + source tables]
+  SB -->|Results| TOOLS -->|Tool response| G
+
+  BE -->|Persist| SB2[(Supabase Postgres)\nsessions + transcript_messages\nquestion_events + knowledge_updates]
 ```

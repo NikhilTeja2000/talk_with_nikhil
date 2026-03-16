@@ -64,6 +64,13 @@ make dev
 
 Frontend on `http://localhost:3000`, backend on `http://localhost:8000`.
 
+### Voice endpoint
+
+- Voice WebSocket: `ws://localhost:8000/ws/voice`
+- Voice model (Vertex AI): `gemini-live-2.5-flash-native-audio`
+  - Input audio: raw PCM16 @ 16kHz
+  - Output audio: raw PCM16 @ 24kHz
+
 ## Available Commands
 
 | Command | What it does |

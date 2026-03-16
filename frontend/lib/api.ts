@@ -120,4 +120,38 @@ export const api = {
       method: "PUT",
       body: JSON.stringify(data),
     }),
+
+  adminGetPreferences: (token: string) =>
+    authedRequest<{ preferences: Record<string, unknown>[] }>(
+      "/api/admin/preferences",
+      token
+    ),
+
+  adminCreatePreference: (token: string, data: Record<string, unknown>) =>
+    authedRequest<{ preference: Record<string, unknown> }>(
+      "/api/admin/preferences",
+      token,
+      { method: "POST", body: JSON.stringify(data) }
+    ),
+
+  adminUpdatePreference: (token: string, preferenceId: string, data: Record<string, unknown>) =>
+    authedRequest<{ preference: Record<string, unknown> }>(
+      `/api/admin/preferences/${preferenceId}`,
+      token,
+      { method: "PUT", body: JSON.stringify(data) }
+    ),
+
+  adminDeletePreference: (token: string, preferenceId: string) =>
+    authedRequest<{ status: string; id: string }>(
+      `/api/admin/preferences/${preferenceId}`,
+      token,
+      { method: "DELETE" }
+    ),
+
+  adminRebuildChunks: (token: string) =>
+    authedRequest<{ status: string; chunks_rebuilt: number }>(
+      "/api/admin/rebuild-chunks",
+      token,
+      { method: "POST" }
+    ),
 };

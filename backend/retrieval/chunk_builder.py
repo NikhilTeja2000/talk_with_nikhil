@@ -99,6 +99,18 @@ def build_chunks_from_db(db=None) -> list[dict]:
             "is_active": True,
         })
 
+    preferences = db.table("preferences").select("*").eq("is_active", True).execute()
+    for pref in (preferences.data or []):
+        chunks.append({
+            "source_table": "preferences",
+            "source_id": pref["id"],
+            "chunk_type": "preference",
+            "title": pref.get("title") or pref.get("category", "Preferences"),
+            "content": pref.get("content", ""),
+            "tags": (pref.get("tags") or []) + ([pref["category"]] if pref.get("category") else []),
+            "is_active": True,
+        })
+
     return chunks
 
 

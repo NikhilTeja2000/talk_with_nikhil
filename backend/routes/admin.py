@@ -37,6 +37,16 @@ class ProfileUpdateRequest(BaseModel):
     contact: Optional[dict] = None
 
 
+class PreferenceUpsertRequest(BaseModel):
+    slug: str
+    category: str
+    title: str
+    content: str
+    tags: Optional[list[str]] = None
+    sort_order: Optional[int] = 0
+    is_active: Optional[bool] = True
+
+
 @router.get("/profile")
 async def get_profile(_user: dict = Depends(require_admin)):
     """Get the current profile data."""
@@ -71,6 +81,58 @@ async def update_profile(
         .execute()
     )
     return {"profile": result.data[0] if result.data else {}}
+
+
+@router.get("/preferences")
+async def list_preferences(_user: dict = Depends(require_admin)):
+    """List all preference entries (admin)."""
+    db = get_supabase()
+    result = (
+        db.table("preferences")
+        .select("*")
+        .order("sort_order")
+        .order("created_at", desc=False)
+        .execute()
+    )
+    return {"preferences": result.data or []}
+
+
+@router.post("/preferences")
+async def create_preference(req: PreferenceUpsertRequest, _user: dict = Depends(require_admin)):
+    """Create a preference entry."""
+    db = get_supabase()
+    existing = db.table("preferences").select("id").eq("slug", req.slug).execute()
+    if existing.data:
+        raise HTTPException(status_code=409, detail="Preference with this slug already exists")
+    result = db.table("preferences").insert(req.model_dump()).execute()
+    return {"preference": result.data[0] if result.data else {}}
+
+
+@router.put("/preferences/{preference_id}")
+async def update_preference(
+    preference_id: str,
+    req: PreferenceUpsertRequest,
+    _user: dict = Depends(require_admin),
+):
+    """Update a preference entry."""
+    db = get_supabase()
+    result = (
+        db.table("preferences")
+        .update(req.model_dump())
+        .eq("id", preference_id)
+        .execute()
+    )
+    if not result.data:
+        raise HTTPException(status_code=404, detail="Preference not found")
+    return {"preference": result.data[0]}
+
+
+@router.delete("/preferences/{preference_id}")
+async def delete_preference(preference_id: str, _user: dict = Depends(require_admin)):
+    """Delete a preference entry."""
+    db = get_supabase()
+    db.table("preferences").delete().eq("id", preference_id).execute()
+    return {"status": "deleted", "id": preference_id}
 
 
 @router.get("/sessions")
