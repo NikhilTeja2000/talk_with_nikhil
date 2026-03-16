@@ -37,9 +37,12 @@ app = FastAPI(
     description="Real-time AI portfolio backend powered by Google ADK and Gemini Live",
 )
 
+# Support comma-separated origins so production + Vercel preview URLs both work
+_origins = [o.strip() for o in settings.allowed_origin.split(",") if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.allowed_origin],
+    allow_origins=_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

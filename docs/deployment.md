@@ -98,7 +98,7 @@ The frontend talks to the backend via REST and WebSockets, so you deploy the bac
    - Push to your main branch or trigger a deploy from the Vercel dashboard. Vercel will build and host the frontend.
 
 4. **CORS**
-   - Backend must allow the Vercel origin. Set `ALLOWED_ORIGIN` on Cloud Run to your Vercel URL (e.g. `https://your-app.vercel.app`). If you use multiple domains (preview URLs), you may need to allow multiple origins in the FastAPI app.
+   - Backend must allow the Vercel origin. Set `ALLOWED_ORIGIN` on Cloud Run to your Vercel URL (e.g. `https://your-app.vercel.app`). For multiple origins (production + preview URLs), use comma-separated: `ALLOWED_ORIGIN=https://talk-with-nikhil.vercel.app,https://talk-with-nikhil-git-main-xxx.vercel.app`.
 
 ---
 

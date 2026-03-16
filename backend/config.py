@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     gemini_live_model: str = "gemini-2.5-flash"
     gemini_voice_model: str = "gemini-live-2.5-flash-native-audio"
     app_env: str = "development"
-    allowed_origin: str = "http://localhost:3000"
+    allowed_origin: str = "http://localhost:3000"  # Comma-separated for multiple, e.g. "https://talk-with-nikhil.vercel.app,https://talk-with-nikhil-git-main-xxx.vercel.app"
     host: str = "0.0.0.0"
     port: int = 8000
 
