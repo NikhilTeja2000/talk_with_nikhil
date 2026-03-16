@@ -28,25 +28,49 @@ The frontend talks to the backend via REST and WebSockets, so you deploy the bac
    CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
    ```
 
-2. **Build and push** to Artifact Registry (or use Cloud Build):
+2. **Deploy with Cloud Build → Cloud Run** (what you actually used):
    ```bash
    gcloud run deploy talk-with-nikhil-api \
-     --source ./backend \
+     --source backend \
      --region us-central1 \
      --allow-unauthenticated \
-     --set-env-vars "GOOGLE_CLOUD_PROJECT=clinivise2,GOOGLE_CLOUD_LOCATION=us-central1,GOOGLE_GENAI_USE_VERTEXAI=TRUE,GEMINI_LIVE_MODEL=gemini-2.5-flash,GEMINI_VOICE_MODEL=gemini-live-2.5-flash-native-audio,APP_ENV=production"
+     --set-env-vars "APP_ENV=production,GOOGLE_CLOUD_PROJECT=clinivise2,GOOGLE_CLOUD_LOCATION=us-central1,GOOGLE_GENAI_USE_VERTEXAI=TRUE,GEMINI_LIVE_MODEL=gemini-2.5-flash,GEMINI_VOICE_MODEL=gemini-live-2.5-flash-native-audio,SUPABASE_URL=$SUPABASE_URL,SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY,SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY,ALLOWED_ORIGIN=https://talk-with-nikhil.vercel.app"
    ```
-   You’ll need to add Supabase and `ALLOWED_ORIGIN` via Secret Manager or `--set-env-vars` (see below).
+   This command:
+   - Builds the container from the `backend/` folder using the `Dockerfile`
+   - Deploys it as the **`talk-with-nikhil-api`** Cloud Run service in **`us-central1`**
+   - Injects all required env vars in one shot (Gemini, Supabase, `ALLOWED_ORIGIN`)
 
 3. **Environment variables on Cloud Run**  
-   Set at least:
-   - `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION`
-   - `GOOGLE_GENAI_USE_VERTEXAI=TRUE`
-   - `GEMINI_LIVE_MODEL`, `GEMINI_VOICE_MODEL`
-   - `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`
-   - `ALLOWED_ORIGIN` = your Vercel frontend URL (e.g. `https://talk-with-nikhil.vercel.app`)
+   You can also update env vars later with:
+   ```bash
+   # Load local .env and update service env vars
+   set -a && source .env && set +a
+   gcloud run services update talk-with-nikhil-api \
+     --region us-central1 \
+     --set-env-vars "APP_ENV=production,GOOGLE_CLOUD_PROJECT=${GOOGLE_CLOUD_PROJECT:-clinivise2},GOOGLE_CLOUD_LOCATION=${GOOGLE_CLOUD_LOCATION:-us-central1},GOOGLE_GENAI_USE_VERTEXAI=TRUE,GEMINI_LIVE_MODEL=${GEMINI_LIVE_MODEL:-gemini-2.5-flash},GEMINI_VOICE_MODEL=${GEMINI_VOICE_MODEL:-gemini-live-2.5-flash-native-audio},SUPABASE_URL=$SUPABASE_URL,SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY,SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY,ALLOWED_ORIGIN=https://talk-with-nikhil.vercel.app"
+   ```
 
-4. **Note:** Cloud Run will give you a URL like `https://talk-with-nikhil-api-xxxxx-uc.a.run.app`. Use this as the backend base URL for the frontend.
+4. **Note:** Cloud Run gives you a URL like:
+   ```text
+   https://talk-with-nikhil-api-679881662872.us-central1.run.app
+   ```
+   Use this as the backend base URL for the frontend.
+
+5. **Health checks**
+   - Basic: `GET /health` → `{"status": "ok", "service": "talk-with-nikhil"}`
+   - Deep readiness (Gemini + Supabase + knowledge base):  
+     `GET /readiness` → returns a JSON like:
+     ```json
+     {
+       "ready": true,
+       "checks": {
+         "gemini": { "ok": true, "method": "vertex_ai" },
+         "supabase": { "ok": true },
+         "knowledge_base": { "ok": true, "chunks": 41 }
+       }
+     }
+     ```
 
 ---
 
