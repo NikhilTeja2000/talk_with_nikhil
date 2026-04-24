@@ -26,31 +26,61 @@ export default function AdminPage() {
   } | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [sessions, setSessions] = useState<any[]>([]);
+  const [sessionsPage, setSessionsPage] = useState(0);
+  const [sessionsHasMore, setSessionsHasMore] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [flagged, setFlagged] = useState<any[]>([]);
+  const [flaggedPage, setFlaggedPage] = useState(0);
   const [selectedSession, setSelectedSession] = useState<string | null>(null);
 
-  const loadData = useCallback(async () => {
+  const pageSize = 20;
+  const sessionsPageSize = 20;
+
+  const loadData = useCallback(async (page = 0) => {
     if (!accessToken) return;
     try {
       const [statsData, sessionsData, flaggedData] = await Promise.all([
         api.adminGetStats(accessToken),
         api.adminGetSessions(accessToken),
-        api.adminGetFlagged(accessToken),
+        api.adminGetFlagged(accessToken, "open", pageSize, page * pageSize),
       ]);
       setStats(statsData);
-      setSessions(sessionsData.sessions);
       setFlagged(flaggedData.questions);
+      setFlaggedPage(page);
     } catch {
       clearAuth();
     }
-  }, [accessToken, clearAuth]);
+  }, [accessToken, clearAuth, pageSize]);
 
   useEffect(() => {
     if (isAuthenticated) {
-      loadData();
+      loadData(0);
+      // also load first page of sessions
+      loadSessions(0);
     }
   }, [isAuthenticated, loadData]);
+
+  const loadSessions = useCallback(
+    async (page = 0) => {
+      if (!accessToken) return;
+      try {
+        const sessionsData = await api.adminGetSessions(
+          accessToken,
+          sessionsPageSize,
+          page * sessionsPageSize
+        );
+        setSessions(sessionsData.sessions);
+        setSessionsPage(page);
+        setSessionsHasMore(
+          Array.isArray(sessionsData.sessions) &&
+            sessionsData.sessions.length === sessionsPageSize
+        );
+      } catch {
+        clearAuth();
+      }
+    },
+    [accessToken, clearAuth, sessionsPageSize]
+  );
 
   const handleLogout = () => {
     clearAuth();
@@ -132,6 +162,38 @@ export default function AdminPage() {
                         onSelect={setSelectedSession}
                         selectedId={selectedSession}
                       />
+                      <div className="mt-3 flex justify-between items-center text-[10px] terminal-text text-[var(--text-muted)]">
+                        <span>
+                          Page {sessionsPage + 1}
+                          {stats && stats.total_sessions !== undefined && (
+                            <> · Total sessions: {stats.total_sessions}</>
+                          )}
+                        </span>
+                        <div className="flex gap-2">
+                          <button
+                            disabled={sessionsPage === 0}
+                            onClick={() => loadSessions(sessionsPage - 1)}
+                            className={`px-2 py-1 border text-xs ${
+                              sessionsPage === 0
+                                ? "border-[var(--border-subtle)] text-[var(--text-muted)] opacity-50 cursor-not-allowed"
+                                : "border-[var(--border)] text-[var(--text-muted)] hover:border-[var(--accent-cyan)] hover:text-[var(--accent-cyan)]"
+                            }`}
+                          >
+                            PREV
+                          </button>
+                          <button
+                            disabled={!sessionsHasMore}
+                            onClick={() => loadSessions(sessionsPage + 1)}
+                            className={`px-2 py-1 border text-xs ${
+                              !sessionsHasMore
+                                ? "border-[var(--border-subtle)] text-[var(--text-muted)] opacity-50 cursor-not-allowed"
+                                : "border-[var(--border)] text-[var(--text-muted)] hover:border-[var(--accent-cyan)] hover:text-[var(--accent-cyan)]"
+                            }`}
+                          >
+                            NEXT
+                          </button>
+                        </div>
+                      </div>
                     </div>
                     <div>
                       {selectedSession && (
@@ -151,8 +213,47 @@ export default function AdminPage() {
                     </h2>
                     <FlaggedQuestions
                       questions={flagged}
-                      onResolved={loadData}
+                      onRefresh={() => loadData(flaggedPage)}
                     />
+                    {stats && (
+                      <div className="mt-3 flex justify-between items-center text-[10px] terminal-text text-[var(--text-muted)]">
+                        <span>
+                          Page {flaggedPage + 1} of{" "}
+                          {Math.max(
+                            1,
+                            Math.ceil((stats.open_flags || 0) / pageSize)
+                          )}
+                        </span>
+                        <div className="flex gap-2">
+                          <button
+                            disabled={flaggedPage === 0}
+                            onClick={() => loadData(flaggedPage - 1)}
+                            className={`px-2 py-1 border text-xs ${
+                              flaggedPage === 0
+                                ? "border-[var(--border-subtle)] text-[var(--text-muted)] opacity-50 cursor-not-allowed"
+                                : "border-[var(--border)] text-[var(--text-muted)] hover:border-[var(--accent-cyan)] hover:text-[var(--accent-cyan)]"
+                            }`}
+                          >
+                            PREV
+                          </button>
+                          <button
+                            disabled={
+                              !stats.open_flags ||
+                              (flaggedPage + 1) * pageSize >= stats.open_flags
+                            }
+                            onClick={() => loadData(flaggedPage + 1)}
+                            className={`px-2 py-1 border text-xs ${
+                              !stats.open_flags ||
+                              (flaggedPage + 1) * pageSize >= stats.open_flags
+                                ? "border-[var(--border-subtle)] text-[var(--text-muted)] opacity-50 cursor-not-allowed"
+                                : "border-[var(--border)] text-[var(--text-muted)] hover:border-[var(--accent-cyan)] hover:text-[var(--accent-cyan)]"
+                            }`}
+                          >
+                            NEXT
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
 

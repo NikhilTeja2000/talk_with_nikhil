@@ -104,6 +104,13 @@ export const api = {
       }
     ),
 
+  adminDismissFlagged: (token: string, questionId: string) =>
+    authedRequest<{ status: string; question_id: string }>(
+      `/api/admin/flagged/${questionId}/dismiss`,
+      token,
+      { method: "POST" }
+    ),
+
   adminGetStats: (token: string) =>
     authedRequest<{
       total_sessions: number;

@@ -1,0 +1,28 @@
+{
+  "username": "chnt0002",
+  "profile_url": "https://leetcode.com/u/chnt0002/",
+  "summary": "I had a strong LeetCode streak in 2024 and then slowed down afterwards. I treat it as a tool, not a lifestyle.",
+  "problems_solved": {
+    "python3": 567,
+    "python": 36,
+    "mysql": 3
+  },
+  "contest": {
+    "rating": 1406,
+    "global_ranking": "716080/850439",
+    "contests_attended": 2,
+    "top_percent": 84.41
+  },
+  "streaks": {
+    "best_year": 2024,
+    "total_active_days_2024": 283,
+    "max_streak_2024": 245,
+    "note": "My best streak was in 2024. After that I wasn\u2019t grinding LeetCode much."
+  },
+  "skills_highlight": {
+    "advanced": ["Dynamic Programming", "Divide and Conquer", "Trie"],
+    "intermediate": ["Hash Table", "Math", "Greedy"],
+    "fundamental": ["Array", "String", "Sorting"]
+  }
+}
+

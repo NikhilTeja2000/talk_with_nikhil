@@ -18,12 +18,12 @@ interface Question {
 
 interface FlaggedQuestionsProps {
   questions: Question[];
-  onResolved: () => void;
+  onRefresh: () => void;
 }
 
 export default function FlaggedQuestions({
   questions,
-  onResolved,
+  onRefresh,
 }: FlaggedQuestionsProps) {
   const [resolving, setResolving] = useState<string | null>(null);
   const [answer, setAnswer] = useState("");
@@ -35,7 +35,21 @@ export default function FlaggedQuestions({
       await api.adminResolve(token, questionId, answer);
       setResolving(null);
       setAnswer("");
-      onResolved();
+      onRefresh();
+    } catch {
+      // silent
+    }
+  };
+
+  const handleDismiss = async (questionId: string) => {
+    if (!token) return;
+    try {
+      await api.adminDismissFlagged(token, questionId);
+      if (resolving === questionId) {
+        setResolving(null);
+        setAnswer("");
+      }
+      onRefresh();
     } catch {
       // silent
     }
@@ -99,6 +113,12 @@ export default function FlaggedQuestions({
                   RESOLVE
                 </button>
                 <button
+                  onClick={() => handleDismiss(q.id)}
+                  className="text-xs px-2 py-1 border border-red-400 text-red-400 hover:bg-red-500/10 terminal-text"
+                >
+                  DISMISS
+                </button>
+                <button
                   onClick={() => {
                     setResolving(null);
                     setAnswer("");
@@ -110,12 +130,20 @@ export default function FlaggedQuestions({
               </div>
             </div>
           ) : (
-            <button
-              onClick={() => setResolving(q.id)}
-              className="mt-2 text-xs px-2 py-1 border border-[var(--border)] text-[var(--text-muted)] hover:border-[var(--accent-green)] hover:text-[var(--accent-green)] terminal-text"
-            >
-              RESOLVE
-            </button>
+            <div className="mt-2 flex gap-2">
+              <button
+                onClick={() => setResolving(q.id)}
+                className="text-xs px-2 py-1 border border-[var(--border)] text-[var(--text-muted)] hover:border-[var(--accent-green)] hover:text-[var(--accent-green)] terminal-text"
+              >
+                RESOLVE
+              </button>
+              <button
+                onClick={() => handleDismiss(q.id)}
+                className="text-xs px-2 py-1 border border-red-400 text-red-400 hover:bg-red-500/10 terminal-text"
+              >
+                DISMISS
+              </button>
+            </div>
           )}
         </motion.div>
       ))}

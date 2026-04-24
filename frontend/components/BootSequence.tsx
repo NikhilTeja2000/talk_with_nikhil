@@ -13,6 +13,22 @@ interface BootLine {
   status?: "ok" | "fail" | "info" | "cmd";
 }
 
+function getReadinessIssue(readiness: ReadinessCheck | null): string {
+  if (!readiness) {
+    return "voice";
+  }
+
+  if (!readiness.checks.gemini?.ok) {
+    return "voice";
+  }
+
+  if (!readiness.checks.supabase?.ok || !readiness.checks.knowledge_base?.ok) {
+    return "brain";
+  }
+
+  return "system";
+}
+
 export default function BootSequence({ onComplete }: BootSequenceProps) {
   const [lines, setLines] = useState<BootLine[]>([]);
   const [done, setDone] = useState(false);
@@ -73,8 +89,9 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
         addLine('> type "start" to begin', "cmd");
         addLine('> type "game" to play dino runner', "cmd");
       } else {
+        const issue = getReadinessIssue(readiness);
         addLine("", "info");
-        addLine("> looks like nikhil has some issue with his voice...", "fail");
+        addLine(`> looks like nikhil has some issue with his ${issue}...`, "fail");
         addLine("> no worries — will update him.", "fail");
         addLine("> in the mean time, you can play this game!", "info");
         addLine("", "info");

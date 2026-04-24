@@ -244,6 +244,40 @@ async def resolve_flagged_question(
     return {"status": "resolved", "question_id": question_id}
 
 
+@router.post("/flagged/{question_id}/dismiss")
+async def dismiss_flagged_question(
+    question_id: str,
+    _user: dict = Depends(require_admin),
+):
+    """Dismiss a flagged question without creating a knowledge update.
+
+    This is effectively a soft-delete for the admin UI:
+    - sets gap_flag = false so it disappears from flagged views
+    - marks status as resolved so it no longer counts as open
+    """
+    db = get_supabase()
+
+    question = (
+        db.table("question_events")
+        .select("*")
+        .eq("id", question_id)
+        .single()
+        .execute()
+    )
+    if not question.data:
+        raise HTTPException(status_code=404, detail="Question not found")
+
+    db.table("question_events").update({
+        "gap_flag": False,
+        "status": "resolved",
+        "resolution_type": "resolved_dashboard",
+        "resolved_at": "now()",
+    }).eq("id", question_id).execute()
+
+    logger.info(f"Question {question_id} dismissed by admin")
+    return {"status": "dismissed", "question_id": question_id}
+
+
 @router.get("/stats")
 async def dashboard_stats(_user: dict = Depends(require_admin)):
     """Return summary stats for the admin dashboard."""
