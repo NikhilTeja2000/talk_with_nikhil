@@ -1,5 +1,7 @@
 # Talk with Nikhil -- Architecture
 
+> **Low-level walkthrough (audio flow, file map, WebSocket endpoints):** see [PROJECT_OVERVIEW.md](./PROJECT_OVERVIEW.md). AI assistants: also see [AGENTS.md](../AGENTS.md) at repo root.
+
 ## System Overview
 
 ```
@@ -14,7 +16,7 @@ FastAPI Backend (port 8000)
    +-- Voice Agent (Gemini Live API, native audio)
    |      |
    |      +-- /ws/voice (bidirectional audio + barge-in)
-   |      +-- 5 retrieval tools (function calling)
+   |      +-- 6 retrieval tools (function calling)
    |             |
    |             v
    |        KnowledgeSearch --> Supabase (knowledge_chunks)
@@ -56,7 +58,8 @@ The primary product. A user opens the terminal, types `start`, and enters a live
 **Gemini Live (native audio):**
 - Voice model: `gemini-live-2.5-flash-native-audio`
 - Persona + behavioral rules: `backend/prompts/persona.md` (system instruction)
-- Tool calling: `search_about_nikhil`, `get_project_details`, `get_experience_details`, `get_timeline_event`, `get_links`
+- Tool calling: `search_about_nikhil`, `get_project_details`, `get_experience_details`, `get_timeline_event`, `get_links`, `get_preferences`
+- Text-only alternate WebSocket: `/ws/live` (see [PROJECT_OVERVIEW.md](./PROJECT_OVERVIEW.md#two-websocket-endpoints-do-not-confuse-them))
 - Audio formats:
   - Input: raw 16-bit PCM @ 16kHz, little-endian (`audio/pcm;rate=16000`)
   - Output: raw 16-bit PCM @ 24kHz, little-endian

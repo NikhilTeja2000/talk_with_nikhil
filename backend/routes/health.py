@@ -49,10 +49,17 @@ async def readiness_check():
         logger.warning(f"Gemini check failed: {e}")
         checks["gemini"] = {"ok": False, "method": "missing", "error": str(e)[:120]}
 
-    # Supabase config check
-    checks["supabase"] = {
-        "ok": bool(settings.supabase_url and settings.supabase_service_role_key)
-    }
+    # Supabase connectivity (wakes paused free-tier projects on first request)
+    try:
+        if not settings.supabase_url or not settings.supabase_service_role_key:
+            raise ValueError("SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY not set")
+        from storage.supabase_client import get_supabase
+        db = get_supabase()
+        db.table("profiles").select("id").limit(1).execute()
+        checks["supabase"] = {"ok": True}
+    except Exception as e:
+        logger.warning(f"Supabase check failed: {e}")
+        checks["supabase"] = {"ok": False, "error": str(e)[:120]}
 
     # Knowledge base check
     try:

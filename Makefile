@@ -1,4 +1,4 @@
-.PHONY: install install-backend install-frontend dev dev-backend dev-frontend build clean
+.PHONY: install install-backend install-frontend dev dev-backend dev-frontend build clean sync-knowledge
 
 # ─── Install everything ───────────────────────────────────────────────
 
@@ -38,6 +38,13 @@ build: build-frontend
 
 build-frontend:
 	cd frontend && npm run build
+
+# ─── Knowledge sync (data/ → Supabase → chunks) ───────────────────────
+
+sync-knowledge:
+	cd backend && . .venv/bin/activate && \
+		python scripts/sync_data_to_supabase.py && \
+		python scripts/rebuild_chunks.py
 
 # ─── Cleanup ──────────────────────────────────────────────────────────
 

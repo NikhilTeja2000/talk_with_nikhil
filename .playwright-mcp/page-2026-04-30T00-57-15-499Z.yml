@@ -1,0 +1,397 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - link "Skip to main content" [ref=e3] [cursor=pointer]:
+      - /url: "#content"
+    - banner [ref=e7]:
+      - generic [ref=e12]:
+        - generic [ref=e14]:
+          - list [ref=e15]:
+            - listitem [ref=e16]:
+              - link "TurboTax" [ref=e17] [cursor=pointer]:
+                - /url: https://turbotax.intuit.com/?cid=seq_intuit_tt_click_hd
+                - img "TurboTax" [ref=e18]
+            - listitem [ref=e19]:
+              - link "Credit Karma" [ref=e20] [cursor=pointer]:
+                - /url: https://www.creditkarma.com/?source=intuit
+                - img "Credit Karma" [ref=e21]
+            - listitem [ref=e22]:
+              - link "QuickBooks" [ref=e23] [cursor=pointer]:
+                - /url: https://quickbooks.intuit.com/?sc=seq_intuit_qb_click_hd
+                - img "QuickBooks" [ref=e24]
+            - listitem [ref=e25]:
+              - link "MailChimp Logo" [ref=e26] [cursor=pointer]:
+                - /url: https://mailchimp.com/?utm_source=intuit.com&utm_medium=referral
+                - img "MailChimp" [ref=e27]
+          - list [ref=e28]:
+            - listitem [ref=e29]:
+              - button "Job Alerts" [ref=e30] [cursor=pointer]
+            - listitem [ref=e31]:
+              - link "0 Saved Jobs" [ref=e34] [cursor=pointer]:
+                - /url: /saved-jobs
+                - generic [ref=e35]: "0"
+                - text: Saved Jobs
+        - generic [ref=e37]:
+          - paragraph [ref=e39]:
+            - link "Intuit Careers" [ref=e40] [cursor=pointer]:
+              - /url: https://www.intuit.com/careers
+              - img "intuit logo" [ref=e41]
+              - text: Careers
+          - navigation "Main" [ref=e42]:
+            - list [ref=e43]:
+              - listitem [ref=e44] [cursor=pointer]:
+                - button "Job Categories " [ref=e46]
+                - text: 
+              - listitem [ref=e47] [cursor=pointer]:
+                - button "Programs " [ref=e49]
+                - text: 
+              - listitem [ref=e50] [cursor=pointer]:
+                - button "Locations " [ref=e52]
+                - text: 
+              - listitem [ref=e53] [cursor=pointer]:
+                - button "Intuit Life " [ref=e55]
+                - text: 
+              - listitem [ref=e56] [cursor=pointer]:
+                - link "Technology" [ref=e58]:
+                  - /url: https://www.intuit.com/technology/
+              - text:     
+    - main [ref=e59]:
+      - search [ref=e61]:
+        - text: 
+        - group "Search Jobs" [ref=e62]:
+          - generic [ref=e63]:
+            - paragraph [ref=e64]:
+              - generic [ref=e65] [cursor=pointer]: Search Jobs by Keyword
+              - searchbox "Search Jobs by Keyword" [ref=e66]
+            - paragraph [ref=e67]:
+              - generic [ref=e68] [cursor=pointer]: Location
+              - combobox "Location" [ref=e69]
+            - button "Search Jobs" [ref=e70] [cursor=pointer]
+      - generic [ref=e73]:
+        - generic [ref=e74]:
+          - heading "Staff Software Engineer" [level=1] [ref=e75]
+          - generic [ref=e76]:
+            - generic [ref=e77]: "Category: Software Engineering"
+            - generic [ref=e78]: "Location: Mountain View, California"
+            - generic [ref=e79]: "Job ID: 18038"
+          - generic [ref=e80]:
+            - link "Apply Now" [ref=e81] [cursor=pointer]:
+              - /url: https://intuit.avature.net/externalCareers/JobApplication?pipelineId=18038
+            - generic [ref=e82]:
+              - button "Share Job " [ref=e83] [cursor=pointer]
+              - button "Save Job" [ref=e84] [cursor=pointer]:
+                - generic [ref=e85]: Save Job
+                - text: 
+        - generic [ref=e86]:
+          - generic [ref=e87]:
+            - heading "Company Overview" [level=2] [ref=e88]
+            - paragraph [ref=e90]: Intuit is the global financial technology platform that powers prosperity for the people and communities we serve. With approximately 100 million customers worldwide using products such as TurboTax, Credit Karma, QuickBooks, and Mailchimp, we believe that everyone should have the opportunity to prosper. We never stop working to find new, innovative ways to make that possible.
+          - generic [ref=e91]:
+            - heading "Job Overview" [level=2] [ref=e92]
+            - paragraph [ref=e93]:
+              - generic [ref=e94]: The Tech 4 Intuit (T4I) People and Places Technology team delivers the technical solutions that support the entire lifecycle (Hire to Retire) for our global employees. We are seeking a highly skilled Staff Software Engineer with a strong background in Java, AWS, Kafka etc. preferably with experience in the enterprise engineering domains and working experience on building platforms. In this role, you will develop high-quality, scalable software that aligns with Intuit's architectural best practices and core values, delivering best-in-class solutions that directly impact every Intuit employee.
+            - paragraph [ref=e95]:
+              - strong [ref=e96]: Responsibilities
+            - paragraph [ref=e97]
+            - list [ref=e98]:
+              - listitem [ref=e99]:
+                - text: 
+                - paragraph [ref=e100]: Design, build, and maintain scalable web applications, backend services, and data integration pipelines.
+              - listitem [ref=e101]:
+                - text: 
+                - paragraph [ref=e102]: Drive the end-to-end technical execution of projects and features, ensuring high standards for quality and operational excellence.
+              - listitem [ref=e103]:
+                - text: 
+                - paragraph [ref=e104]: Shape architectural decisions, Participate in design reviews and ensure sustainable code for scale and/or rapid iteration.
+              - listitem [ref=e105]:
+                - text: 
+                - paragraph [ref=e106]: Lead the technical design of complex features, making sound architectural decisions and creating clear, effective documentation
+              - listitem [ref=e107]:
+                - text: 
+                - paragraph [ref=e108]: Set solid technical examples and patterns and drive best practices adoption including testing and observability
+              - listitem [ref=e109]:
+                - text: 
+                - paragraph [ref=e110]: Solves complex, ambiguous technical bugs that may require system understanding outside their team's ownership
+              - listitem [ref=e111]:
+                - text: 
+                - paragraph [ref=e112]: Provide reliable project estimates, factoring in technical risks and team capacity, while strategically balancing trade-offs between rapid delivery and long-term system health
+              - listitem [ref=e113]:
+                - text: 
+                - paragraph [ref=e114]: Eliminates systemic roadblocks through cross-functional influence and shape execution practices to maintain quality standards through every release, monitoring after it goes live.
+              - listitem [ref=e115]:
+                - text: 
+                - paragraph [ref=e116]: Takes full responsibility for successful delivery of major features or projects, including managing risks and keeping stakeholders informed.
+              - listitem [ref=e117]:
+                - text: 
+                - paragraph [ref=e118]: Resolve technical constraints between individual and/or cross-functional partners by leveraging values, principles, customer problems and technology patterns/best practices.
+              - listitem [ref=e119]:
+                - text: 
+                - paragraph [ref=e120]: Demonstrate a strong aptitude for learning and applying new languages, frameworks, and technologies to solve emerging challenges
+              - listitem [ref=e121]:
+                - text: 
+                - paragraph [ref=e122]: Identify and explore opportunities to apply AI/ML, including Generative AI, to enhance application features and streamline workflows
+              - listitem [ref=e123]:
+                - text: 
+                - paragraph [ref=e124]: Lead technology/design evaluation and adoption, considering long-term implications and integrating AI/GenAI tools to enhance team capabilities
+            - paragraph [ref=e125]:
+              - strong [ref=e126]: Qualifications
+            - paragraph [ref=e127]
+            - list [ref=e128]:
+              - listitem [ref=e129]:
+                - text: 
+                - paragraph [ref=e130]: 5+ years of experience designing and developing web applications, backend services, and data pipelines.
+              - listitem [ref=e131]:
+                - text: 
+                - paragraph [ref=e132]: 3+ years of experience with server-side technologies.
+              - listitem [ref=e133]:
+                - text: 
+                - paragraph [ref=e134]: BS/MS in computer science or equivalent work experience.
+              - listitem [ref=e135]:
+                - text: 
+                - paragraph [ref=e136]: Strong experience developing Java/Java EE services and applications, preferably with Spring Boot.
+              - listitem [ref=e137]:
+                - text: 
+                - paragraph [ref=e138]: Strong knowledge of API development (REST/GraphQL), including pagination, throttling, caching, API security, and routing.
+              - listitem [ref=e139]:
+                - text: 
+                - paragraph [ref=e140]: Expertise in cloud technologies (AWS preferred) and architecting highly scalable, resilient systems.
+              - listitem [ref=e141]:
+                - text: 
+                - paragraph [ref=e142]: Working knowledge of streaming frameworks and event-driven architecture.Experience on Apache Flink is good to have.
+              - listitem [ref=e143]:
+                - text: 
+                - paragraph [ref=e144]: Experience with observability tools (e.g., Splunk, Wavefront) for improving application logging, creating dashboards and visualizations.
+              - listitem [ref=e145]:
+                - text: 
+                - paragraph [ref=e146]: Excellent communication skills, with the ability to explain complex technical concepts to diverse audiences.
+              - listitem [ref=e147]:
+                - text: 
+                - paragraph [ref=e148]: Experience with unit testing, Test Driven Development( TDD), and test automation tools (e.g., Karate).
+              - listitem [ref=e149]:
+                - text: 
+                - paragraph [ref=e150]: Solid knowledge of algorithms, design patterns, and clean architecture is necessary
+              - listitem [ref=e151]:
+                - text: 
+                - paragraph [ref=e152]: Experience with SQL/NoSQL databases, data lakes, Kafka, and schema modeling.
+              - listitem [ref=e153]:
+                - text: 
+                - paragraph [ref=e154]: Experience with Agile development methodologies such as Scrum and XP.
+              - listitem [ref=e155]:
+                - text: 
+                - paragraph [ref=e156]: Experience in enterprise engineering domains (e.g., Finance, HR, Places) is a plus.
+            - paragraph [ref=e157]:
+              - text: Intuit provides a competitive compensation package with a strong pay for performance rewards approach. This position will be eligible for a cash bonus, equity rewards and benefits, in accordance with our applicable plans and programs (see more about our compensation and benefits at
+              - 'link "Intuit®: Careers | Benefits" [ref=e158] [cursor=pointer]':
+                - /url: https://www.intuit.com/careers/benefits/full-time-employees/
+              - text: "). Pay offered is based on factors such as job-related knowledge, skills, experience, and work location. To drive ongoing fair pay for employees, Intuit conducts regular comparisons across categories of ethnicity and gender. The expected base pay range for this position is:"
+            - paragraph [ref=e159]: Bay Area California $197,000- 266,500
+            - paragraph [ref=e160]
+          - generic [ref=e161]:
+            - link "Apply Now" [ref=e162] [cursor=pointer]:
+              - /url: https://intuit.avature.net/externalCareers/JobApplication?pipelineId=18038
+            - button "Save Job" [ref=e163] [cursor=pointer]:
+              - generic [ref=e164]: Save Job
+              - text: 
+            - button "Share Job " [ref=e165] [cursor=pointer]
+      - generic [ref=e167]:
+        - generic [ref=e169]:
+          - heading "Career Path" [level=2] [ref=e170]
+          - paragraph [ref=e171]: Mobility plays an important role for our engineering community. In addition to vertical growth, our teams offer lateral growth opportunities. Whether it’s working on a different tech stack or product, Intuit will help you get to the next step in your career.
+        - list [ref=e174]:
+          - listitem [ref=e175]:
+            - generic [ref=e177]:
+              - generic [ref=e179]: Software Engineer 1 & 2
+              - img [ref=e180]
+          - listitem [ref=e182]:
+            - generic [ref=e184]:
+              - img [ref=e185]
+              - generic [ref=e187]:
+                - img [ref=e188]
+                - generic [ref=e190]: Sr. Software Engineer
+              - img [ref=e191]
+          - listitem [ref=e193]:
+            - generic [ref=e195]:
+              - img [ref=e196]
+              - generic [ref=e198]:
+                - img [ref=e199]
+                - generic [ref=e201]: Staff Software Engineer
+              - img [ref=e202]
+          - listitem [ref=e204]:
+            - generic [ref=e206]:
+              - img [ref=e207]
+              - generic [ref=e209]:
+                - img [ref=e210]
+                - generic [ref=e212]: Sr. Staff Software Engineer
+              - img [ref=e213]
+          - listitem [ref=e215]:
+            - generic [ref=e217]:
+              - img [ref=e218]
+              - generic [ref=e220]:
+                - img [ref=e221]
+                - generic [ref=e223]: Principal Software Engineer
+              - img [ref=e224]
+          - listitem [ref=e226]:
+            - generic [ref=e228]:
+              - img [ref=e229]
+              - generic [ref=e231]:
+                - img [ref=e232]
+                - generic [ref=e234]: Distinguished Software Engineer
+      - generic [ref=e236]:
+        - blockquote [ref=e239]:
+          - paragraph [ref=e240]: Intuit supports you, not just as you are now, but as the person that you want to grow to be.
+          - generic [ref=e241]:
+            - generic [ref=e242]: Alex Pollock
+            - text: Senior Software Engineer
+        - generic [ref=e243]:
+          - 'button "Software Engineering at Intuit: Alex Pollock (Video) "':
+            - 'img "Software Engineering at Intuit: Alex Pollock (Video)"'
+            - text: 
+      - generic [ref=e245]:
+        - heading "Related Content" [level=2] [ref=e246]
+        - generic [ref=e247]:
+          - list [ref=e248]:
+            - listitem [ref=e249] [cursor=pointer]:
+              - generic [ref=e251]:
+                - generic [ref=e252]:
+                  - paragraph [ref=e253]: Blog
+                  - heading "AI-powered experiences take ‌center stage at Intuit’s Global Engineering Days " [level=3] [ref=e254]:
+                    - link "AI-powered experiences take ‌center stage at Intuit’s Global Engineering Days " [ref=e255]:
+                      - /url: /blog-innovative-thinking-ai-powered-experiences-at-global-engineering-days?cid=seo_google
+                - paragraph [ref=e257]: Intuit's, GED Spring 2025, week-long code-a-thon expanded on AI-related projects to push the boundaries of what can be done for customers.
+            - listitem [ref=e258] [cursor=pointer]:
+              - generic [ref=e260]:
+                - generic [ref=e261]:
+                  - paragraph [ref=e262]: Blog
+                  - heading "How Intuit data analysts write SQL 2x faster with internal GenAI tool " [level=3] [ref=e263]:
+                    - link "How Intuit data analysts write SQL 2x faster with internal GenAI tool " [ref=e264]:
+                      - /url: https://medium.com/intuit-engineering/how-intuit-data-analysts-write-sql-2x-faster-with-internal-genai-tool-c3b9d482208a
+                - paragraph [ref=e266]: For Intuit, turning data into actionable insights is pivotal to our success in delivering awesome experiences to 100 million customers That’s why we’ve developed an internal generative AI powered tool called Query Kickstart to improve speed to insight by accelerating SQL query authoring for our data workers.
+            - listitem [ref=e267] [cursor=pointer]:
+              - generic [ref=e269]:
+                - generic [ref=e270]:
+                  - paragraph [ref=e271]: Blog
+                  - heading "10 Essential Software Engineer Skills to Succeed in Today’s Tech Industry " [level=3] [ref=e272]:
+                    - link "10 Essential Software Engineer Skills to Succeed in Today’s Tech Industry " [ref=e273]:
+                      - /url: https://www.intuit.com/blog/innovative-thinking/software-engineer-skills/?s=what+skills+are+needed+to+be+a+software+engineer
+                - paragraph [ref=e275]: This guide covers 10 in-demand software engineer skills, technical and otherwise. We’ll also go into how to build those skills and how to prove yourself to prospective employers.
+          - generic [ref=e277]: 20 Results found.
+      - generic [ref=e279]:
+        - generic [ref=e280]:
+          - heading "Jobs For You" [level=2] [ref=e281]
+          - tablist [ref=e282]:
+            - tab "Viewed Jobs" [selected] [ref=e283] [cursor=pointer]:
+              - generic [ref=e284]: Viewed Jobs
+            - tab "Related Jobs" [ref=e285] [cursor=pointer]
+            - tab "Saved Jobs" [ref=e286] [cursor=pointer]
+        - tabpanel "Viewed Jobs" [ref=e287]:
+          - generic [ref=e290]:
+            - paragraph [ref=e291]: You haven't viewed any jobs yet. Start exploring now to find the perfect opportunity for you!
+            - link "View all of our available opportunities" [ref=e292] [cursor=pointer]:
+              - /url: /search-jobs?cid=seo_google
+      - generic [ref=e294]:
+        - heading "Sign Up for Job Alerts" [level=2] [ref=e295]
+        - paragraph [ref=e296]: Be the first to find out about open jobs that fit what you're looking for.
+        - button "Sign Up" [ref=e297] [cursor=pointer]
+      - text: + 
+    - contentinfo [ref=e304]:
+      - generic [ref=e305]:
+        - generic [ref=e309]:
+          - heading "Sitemap" [level=2] [ref=e311]:
+            - link "Sitemap" [ref=e312] [cursor=pointer]:
+              - /url: /sitemap?cid=seo_google
+          - generic [ref=e314]:
+            - link "Facebook" [ref=e316] [cursor=pointer]:
+              - /url: https://www.facebook.com/intuit
+              - img "Facebook" [ref=e318]
+            - link "Twitter" [ref=e320] [cursor=pointer]:
+              - /url: https://twitter.com/Intuit
+              - img "Twitter" [ref=e322]
+            - link "YouTube" [ref=e324] [cursor=pointer]:
+              - /url: https://www.youtube.com/user/intuit
+              - img "YouTube" [ref=e326]
+            - link "LinkedIn" [ref=e328] [cursor=pointer]:
+              - /url: https://www.linkedin.com/company/intuit
+              - img "LinkedIn" [ref=e330]
+        - generic [ref=e331]:
+          - generic [ref=e333]:
+            - link "Intuit" [ref=e335] [cursor=pointer]:
+              - /url: https://www.intuit.com/
+              - img "Intuit-Blue.Intuit-RGB-Blue" [ref=e337]
+            - generic [ref=e338]:
+              - link "TurboTax" [ref=e339] [cursor=pointer]:
+                - /url: https://turbotax.intuit.com/?cid=seq_intuit_tt_click_ft
+                - img "TurboTax" [ref=e340]
+              - link "Credit Karma" [ref=e341] [cursor=pointer]:
+                - /url: https://www.creditkarma.com/?source=intuit
+                - img "Credit Karma" [ref=e342]
+              - link "QuickBooks" [ref=e343] [cursor=pointer]:
+                - /url: https://quickbooks.intuit.com/?sc=seq_intuit_qb_click_ft
+                - img "QuickBooks" [ref=e344]
+              - link "MailChimp Logo" [ref=e345] [cursor=pointer]:
+                - /url: https://mailchimp.com/?utm_source=intuit.com&utm_medium=referral
+                - img "MailChimp" [ref=e346]
+          - generic [ref=e348]:
+            - list [ref=e349]:
+              - listitem [ref=e350]:
+                - link "Insight" [ref=e351] [cursor=pointer]:
+                  - /url: https://insight.app.intuit.com/home
+              - listitem [ref=e352]:
+                - link "Betterworks" [ref=e353] [cursor=pointer]:
+                  - /url: https://app.betterworks.com/app/
+              - listitem [ref=e354]:
+                - link "About Intuit" [ref=e355] [cursor=pointer]:
+                  - /url: https://www.intuit.com/company
+                  - text: About Us
+              - listitem [ref=e356]:
+                - link "Careers" [ref=e357] [cursor=pointer]:
+                  - /url: https://www.intuit.com/careers
+              - listitem [ref=e358]:
+                - link "Press Room" [ref=e359] [cursor=pointer]:
+                  - /url: https://www.intuit.com/company/press-room
+            - generic [ref=e361]:
+              - generic [ref=e362]:
+                - paragraph [ref=e363]: © 2025 Intuit Inc. All rights reserved.
+                - paragraph [ref=e364]:
+                  - text: Intuit is proud to be an equal opportunity and affirmative action employer. We make employment decisions without regards to race, color, religion, sex, sexual orientation, gender identity, national origin, age, veteran status, disability status, pregnancy, or any other basis protected by federal, state or local law. We also consider qualified applicants regardless of criminal histories, consistent with legal requirements. If you need assistance and/or a reasonable accommodation due to a disability during the application or recruiting process, please talk with your recruiter or send a request to
+                  - link "TalentAcquisition@intuit.com" [ref=e365] [cursor=pointer]:
+                    - /url: mailto:TalentAcquisition@intuit.com
+                  - text: . For more information, please read our
+                  - link "EEO policy" [ref=e366] [cursor=pointer]:
+                    - /url: https://www.intuit.com/careers/legal/
+                  - text: . Intuit encourages people with criminal record histories to apply for employment, and values diverse experiences, including prior contact with the criminal legal system. To that end, Intuit welcomes such applicants in accordance with the California Fair Chance Act, Los Angeles City Fair Chance Act Ordinance, Los Angeles County Fair Chance Act Ordinance, the San Francisco Fair Chance Act Ordinance, and other similar laws. Philadelphia applicants can review information pertaining to Philadelphia’s Fair Criminal Record Screening Standards Ordinance
+                  - link "here" [ref=e367] [cursor=pointer]:
+                    - /url: https://www.phila.gov/documents/fair-chance-hiring-law-poster/
+                  - text: . Applicants for jobs in unincorporated areas of Los Angeles County can review a copy of the Los Angeles County Fair Chance Act Notice
+                  - link "here" [ref=e368] [cursor=pointer]:
+                    - /url: https://dcba.lacounty.gov/wp-content/uploads/2024/08/FCOE-Official-Notice-Eng-Final-8.30.2024.pdf
+                  - text: .
+                - paragraph [ref=e369]:
+                  - link "Intuit Cookie Policy" [ref=e370] [cursor=pointer]:
+                    - /url: https://security.intuit.com/intuit-cookie-policy
+                  - link "Manage Cookies" [ref=e372] [cursor=pointer]:
+                    - /url: /cookie-management?cid=seo_google
+              - generic [ref=e373]:
+                - list [ref=e374]:
+                  - listitem [ref=e375]:
+                    - link "Legal" [ref=e376] [cursor=pointer]:
+                      - /url: https://www.intuit.com/careers/legal
+                  - listitem [ref=e377]:
+                    - link "Privacy" [ref=e378] [cursor=pointer]:
+                      - /url: https://www.intuit.com/privacy
+                  - listitem [ref=e379]:
+                    - link "Security" [ref=e380] [cursor=pointer]:
+                      - /url: https://security.intuit.com/
+                  - listitem [ref=e381]:
+                    - link "Recruitment Fraud" [ref=e382] [cursor=pointer]:
+                      - /url: https://www.intuit.com/careers/recruitment-fraud/
+                - generic:
+                  - link "Truste Privacy Seal":
+                    - /url: https://privacy.truste.com/privacy-seal/validation?rid=7fc012b5-d53b-42d8-b980-c4f9091a97e1
+                    - img "TRUSTe Privacy Seal"
+  - status
+  - status
+  - status
+  - status
+  - alert [ref=e383]:
+    - paragraph [ref=e384]: We use cookies and other tracking technologies to support navigation, to improve our products and services, to support our marketing activities and to provide content from third parties.To manage your preferences, select "Manage Settings" or choose "Accept" to consent to the use of Cookies.
+    - button "Accept" [ref=e385] [cursor=pointer]
+    - button "Manage Settings" [ref=e386] [cursor=pointer]

@@ -139,9 +139,14 @@ talk-with-nikhil/
 │   └── stories/*.md
 │
 └── docs/
-    └── architecture.md       # living architecture document
+    ├── PROJECT_OVERVIEW.md   # low-level map (audio, WS, modules) — read first
+    ├── knowledge-organization.md  # LinkedIn / updates → Supabase types
+    ├── architecture.md       # schema, layers, V2
+    └── deployment.md
 ```
 
 ## Architecture
 
-See [docs/architecture.md](docs/architecture.md) for the full system architecture.
+- **[docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md)** — Low-level overview (audio flow, frontend/backend, WebSockets). Start here.
+- **[docs/architecture.md](docs/architecture.md)** — Full system architecture, database, env vars.
+- **[AGENTS.md](AGENTS.md)** — Pointer for AI assistants to use the docs above before spelunking code.

@@ -100,6 +100,31 @@ The frontend talks to the backend via REST and WebSockets, so you deploy the bac
 4. **CORS**
    - Backend must allow the Vercel origin. Set `ALLOWED_ORIGIN` on Cloud Run to your Vercel URL (e.g. `https://your-app.vercel.app`). For multiple origins (production + preview URLs), use comma-separated: `ALLOWED_ORIGIN=https://talk-with-nikhil.vercel.app,https://talk-with-nikhil-git-main-xxx.vercel.app`.
 
+5. **Keepalive cron (prevents Supabase auto-pause)**
+   - `frontend/vercel.json` runs **`/api/cron/keepalive` daily** at 12:00 UTC (`0 12 * * *`).
+   - The route does two things in parallel:
+     1. **Direct Supabase REST ping** from Vercel (wakes a paused free-tier project).
+     2. **`GET /readiness`** on Cloud Run (wakes backend + validates Gemini, Supabase, chunk count).
+   - Cron only runs on **deployed Vercel** (not locally). Check **Vercel → Project → Cron Jobs** after deploy.
+
+   **Vercel env vars for cron:**
+
+   | Variable | Required | Purpose |
+   |----------|----------|---------|
+   | `NEXT_PUBLIC_SUPABASE_URL` | Yes | Direct Supabase ping |
+   | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Yes | Direct Supabase ping |
+   | `API_BASE_URL` or `NEXT_PUBLIC_API_BASE_URL` | Yes | Backend `/readiness` |
+   | `CRON_SECRET` | Recommended | Vercel sends `Authorization: Bearer <secret>` on cron invocations |
+
+   **Manual test after deploy:**
+   ```bash
+   curl -H "Authorization: Bearer $CRON_SECRET" \
+     https://your-app.vercel.app/api/cron/keepalive
+   ```
+   Expect `"ok": true` and `"supabase": { "ok": true }`. First hit after a long idle period may be slow (Supabase or Cloud Run waking up).
+
+   **Note:** Free-tier Supabase pauses after ~7 days without DB activity. Daily cron keeps it warm. For demos with zero downtime, upgrade Supabase or ping more often.
+
 ---
 
 ## Summary

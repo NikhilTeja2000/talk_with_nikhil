@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "description": "Curated LinkedIn / recent activity. Synced to Supabase as FAQs (and projects where noted). See docs/knowledge-organization.md for types.",
+  "entries": [
+    {
+      "id": "flowhouse-cohort-1",
+      "type": "cohort",
+      "entity_kind": "program_selection",
+      "date": "2026-05",
+      "title": "FlowHouse Cohort 1 (Prettiflow)",
+      "summary": "Selected for FlowHouse Cohort 1, a private builder cohort by Prettiflow with credits and resources from partners including NVIDIA, OpenAI, Anthropic, AWS, Azure, and PostHog.",
+      "status": "active",
+      "tags": ["flowhouse", "prettiflow", "builders", "cohort"],
+      "source": "linkedin",
+      "source_urn": "urn:li:share:7462990572245581824",
+      "related_project_slug": null,
+      "agent_guidance": {
+        "when_to_mention": "Recent programs, what Nikhil is doing now, builder communities.",
+        "do_not_say": ["won a hackathon", "built FlowHouse"],
+        "clarify": "This is a cohort selection, not a product Nikhil built."
+      }
+    },
+    {
+      "id": "amazon-nova-hackathon-medicaid-agent",
+      "type": "hackathon_project",
+      "entity_kind": "portfolio_project",
+      "date": "2026-01",
+      "title": "Medicaid Analytics Agent (Amazon Nova AI Hackathon 2026)",
+      "summary": "Built an agent to chat with US Medicaid provider-level claims data (2018–2024) in plain English—tables and charts for questions about providers, billing codes, and trends. Stack: AWS Bedrock Nova 2 Lite, Snowflake. Built for Amazon Nova AI Hackathon 2026.",
+      "status": "shipped",
+      "tags": ["hackathon", "amazon-nova", "aws", "snowflake", "agentic-ai", "healthcare", "open-data"],
+      "source": "linkedin",
+      "source_url": "https://www.linkedin.com/posts/nikhil-teja-chilakabattina-9337511b4_medicaid-analytics-agent-investigate-medicaid-activity-7438009534369124352-D6_D",
+      "related_project_slug": "medicaid-analytics-agent",
+      "links": {
+        "demo": "https://lnkd.in/gHVYZYSX",
+        "writeup": "https://lnkd.in/gmzzkKe2"
+      },
+      "agent_guidance": {
+        "when_to_mention": "Hackathons, AI agents, healthcare data, AWS/Nova projects, recent builds.",
+        "do_not_say": ["Nikhil won first prize", "employed by Medicaid"],
+        "clarify": "This is a hackathon project using public Medicaid spending data—not clinical care software."
+      },
+      "project_payload": {
+        "slug": "medicaid-analytics-agent",
+        "name": "Medicaid Analytics Agent",
+        "category": "Hackathon / Agentic AI / Open Data",
+        "status": "Built (Hackathon)",
+        "one_liner": "Chat with US Medicaid provider claims data in plain English—built for Amazon Nova AI Hackathon 2026.",
+        "problem": "New large public Medicaid datasets are hard for non-analysts to explore quickly.",
+        "solution": "An AI agent that answers natural-language questions with tables and charts over Snowflake-hosted claims data, using AWS Bedrock Nova for reasoning.",
+        "stack": ["AWS Bedrock", "Amazon Nova", "Snowflake", "Agentic AI", "Python"],
+        "focus_areas": ["agentic-ai", "healthcare open data", "natural language analytics"],
+        "why_it_matters": "Shows Nikhil can ship agentic analytics on real public datasets under hackathon constraints."
+      }
+    },
+    {
+      "id": "amazon-nova-hackathon-winner-board",
+      "type": "hackathon_outcome",
+      "entity_kind": "achievement",
+      "date": "2026-01",
+      "title": "Amazon Nova AI Hackathon — Winner board",
+      "summary": "Recognized on the winner board for the Amazon Nova AI Hackathon (Devpost/AWS). Not the top prize tier he hoped for, but the submission (Medicaid Analytics Agent) was acknowledged.",
+      "status": "completed",
+      "tags": ["hackathon", "amazon-nova", "devpost", "winner"],
+      "source": "linkedin",
+      "source_url": "https://www.linkedin.com/posts/nikhil-teja-chilakabattina-9337511b4_amazonnova-hackathon-ai-activity-7448243336743890944-SzKs",
+      "related_project_slug": "medicaid-analytics-agent",
+      "links": { "submission": "https://lnkd.in/gHVYZYSX" },
+      "agent_guidance": {
+        "when_to_mention": "Hackathon wins, recent achievements, Amazon Nova.",
+        "do_not_say": ["won first place", "grand prize"],
+        "clarify": "Winner board recognition—not the highest prize. Pair with the Medicaid Analytics Agent project for context."
+      }
+    },
+    {
+      "id": "amazon-nova-hackathon-aws-credits",
+      "type": "hackathon_outcome",
+      "entity_kind": "achievement",
+      "date": "2026-05",
+      "title": "Amazon Nova AI Hackathon — AWS credits",
+      "summary": "Received AWS credits from the Amazon Nova AI Hackathon organizers (follow-up to the same hackathon as the Medicaid Analytics Agent submission).",
+      "status": "completed",
+      "tags": ["hackathon", "amazon-nova", "aws", "credits"],
+      "source": "linkedin",
+      "source_urn": "urn:li:share:7461130625635291136",
+      "related_project_slug": "medicaid-analytics-agent",
+      "agent_guidance": {
+        "when_to_mention": "Hackathon outcomes, AWS, recent wins.",
+        "do_not_say": ["separate unrelated hackathon"],
+        "clarify": "Same Amazon Nova hackathon arc as the Medicaid agent—credits award, not a new project."
+      }
+    },
+    {
+      "id": "ramudu-sita-game",
+      "type": "project_launch",
+      "entity_kind": "portfolio_project",
+      "date": "2026-01",
+      "title": "Ramudu-Sita (online Telugu party game)",
+      "summary": "Rebuilt a childhood Telugu party game (Ramudu-Sita: chits, roles, guessing, bluffing) as a browser game in ~4 hours so cousins in different cities can play together—with video/audio calls and chat via Anything.",
+      "status": "live",
+      "tags": ["game", "telugu", "side-project", "webrtc", "nostalgia"],
+      "source": "linkedin",
+      "source_url": "https://www.linkedin.com/posts/nikhil-teja-chilakabattina-9337511b4_ramudusita-childhoodmemories-telugugames-activity-7446664915630829568-1HGq",
+      "related_project_slug": "ramudu-sita",
+      "links": { "play": "https://lnkd.in/giYnMPHU" },
+      "agent_guidance": {
+        "when_to_mention": "Side projects, games, Telugu/cultural projects, fast builds, family/social products.",
+        "do_not_say": ["enterprise product", "hackathon winner"],
+        "clarify": "A nostalgic social game—not a hackathon or job project."
+      },
+      "project_payload": {
+        "slug": "ramudu-sita",
+        "name": "Ramudu-Sita",
+        "category": "Game / Social",
+        "status": "Live",
+        "one_liner": "Online version of a Telugu childhood party game with video, audio, chat, and secret roles.",
+        "problem": "Family spread across cities couldn't easily replay a favorite in-person guessing game.",
+        "solution": "Browser-based Ramudu-Sita with secret roles, bluffing, and built-in video/audio calls.",
+        "stack": ["Anything", "WebRTC", "Browser game"],
+        "focus_areas": ["social games", "real-time calls", "nostalgia"],
+        "why_it_matters": "Shows fast 0→1 product sense and building for real human/family use cases, not only résumé projects."
+      }
+    },
+    {
+      "id": "google-adk-agents-badge",
+      "type": "learning",
+      "entity_kind": "certification",
+      "date": "2026-01",
+      "title": "Google learning badge — AI agents with ADK",
+      "summary": "Completed Google learning on building AI agents with ADK: agentic patterns, multi-agent workflows, memory, and MCP—practical tool-connected agents, not theory only.",
+      "status": "completed",
+      "tags": ["google", "adk", "mcp", "agents", "learning"],
+      "source": "linkedin",
+      "source_url": "https://www.linkedin.com/posts/nikhil-teja-chilakabattina-9337511b4_ai-aiagents-googlecloud-activity-7443787870634422272-ewMG",
+      "related_project_slug": null,
+      "agent_guidance": {
+        "when_to_mention": "Learning, Google Cloud, agents, MCP, Talk with Nikhil stack (ADK/Gemini).",
+        "do_not_say": ["official Google job certification"],
+        "clarify": "A learning badge/course completion—relevant to how Talk with Nikhil is built."
+      }
+    },
+    {
+      "id": "anthropic-claude-cert-share",
+      "type": "learning_share",
+      "entity_kind": "industry_news",
+      "date": "2026-01",
+      "title": "Shared post about Anthropic Claude certification (not Nikhil's cert)",
+      "summary": "LinkedIn post sharing that Anthropic opened Claude Certified Architect / Academy paths (API, Claude Code, MCP, Vertex, Bedrock)—community/news, not a credential Nikhil earned.",
+      "status": "n/a",
+      "tags": ["anthropic", "claude", "certification", "share"],
+      "source": "linkedin",
+      "source_urn": "urn:li:share:7441902653682593793",
+      "related_project_slug": null,
+      "agent_guidance": {
+        "when_to_mention": "Rarely—only if asked about Claude certifications in general.",
+        "do_not_say": ["Nikhil is Claude certified", "Nikhil completed Anthropic certification"],
+        "clarify": "He shared news about the program; he did NOT claim to have the certification himself."
+      }
+    },
+    {
+      "id": "clawdtalk-rime-workshop-sf",
+      "type": "event",
+      "entity_kind": "community_event",
+      "date": "2025-12",
+      "title": "ClawdTalk & Rime workshop (San Francisco)",
+      "summary": "Attended and demoed at a ClawdTalk & Rime workshop in SF—OpenClaw agents, Clawdtalk voice wiring, Rime voice range, Telnyx use cases.",
+      "status": "attended",
+      "tags": ["openclaw", "voice-ai", "telnyx", "rime", "sf", "workshop"],
+      "source": "linkedin",
+      "source_url": "https://www.linkedin.com/posts/nikhil-teja-chilakabattina-9337511b4_openclaw-clawdtalk-telnyx-activity-7439905443826761728-YCsI",
+      "related_project_slug": null,
+      "agent_guidance": {
+        "when_to_mention": "Voice AI events, OpenClaw, SF tech community, Telnyx.",
+        "do_not_say": ["Nikhil built OpenClaw", "employed by Rime"],
+        "clarify": "Attendance/demo at a workshop—not a shipped product launch."
+      }
+    },
+    {
+      "id": "bolt-linkedin-clone",
+      "type": "side_build",
+      "entity_kind": "experiment",
+      "date": "2025-12",
+      "title": "LinkedIn clone with Bolt.new (overnight experiment)",
+      "summary": "Used bolt.new credits to build a LinkedIn-style clone in ~6 hours (9 PM start)—imperfect but real; learned to plan earlier after deployment friction.",
+      "status": "demo",
+      "tags": ["bolt", "nocode", "clone", "experiment"],
+      "source": "linkedin",
+      "source_url": "https://www.linkedin.com/posts/nikhil-teja-chilakabattina-9337511b4_buildinpublic-bolt-nocode-activity-7438971189622075392-3foP",
+      "related_project_slug": "linkedin-clone-bolt",
+      "links": { "video": "https://youtu.be/9Iwd48QBiKY" },
+      "agent_guidance": {
+        "when_to_mention": "Fast prototyping, bolt.new, build-in-public experiments.",
+        "do_not_say": ["production LinkedIn competitor", "main portfolio centerpiece"],
+        "clarify": "A credit-burn learning sprint—not core portfolio like Talk with Nikhil or Medicaid agent."
+      },
+      "project_payload": {
+        "slug": "linkedin-clone-bolt",
+        "name": "LinkedIn Clone (Bolt.new)",
+        "category": "Experiment / No-code",
+        "status": "Demo",
+        "one_liner": "Overnight LinkedIn UI clone built with bolt.new to experiment with speed vs polish.",
+        "problem": "Wanted to stress-test rapid no-code/full-stack generation limits.",
+        "solution": "Built a working clone in one evening; documented deployment lessons.",
+        "stack": ["Bolt.new"],
+        "focus_areas": ["rapid prototyping"],
+        "why_it_matters": "Shows willingness to experiment quickly; lower priority than agent/hackathon work."
+      }
+    }
+  ]
+}

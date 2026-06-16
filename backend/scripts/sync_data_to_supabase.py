@@ -18,6 +18,7 @@ Then rebuild chunks:
 """
 
 import json
+import re
 from pathlib import Path
 
 from storage.supabase_client import get_supabase
@@ -25,6 +26,12 @@ from storage.supabase_client import get_supabase
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT.parent / "data"
+
+
+def slugify(text: str) -> str:
+    s = text.lower().strip()
+    s = re.sub(r"[^a-z0-9]+", "-", s)
+    return s.strip("-")
 
 
 def load_json(path: Path):
@@ -56,7 +63,9 @@ def sync_projects(db):
             .limit(1)
             .execute()
         )
+        slug = proj.get("slug") or slugify(name)
         base = {
+            "slug": slug,
             "name": name,
             "category": proj.get("category"),
             "status": proj.get("status"),
@@ -72,10 +81,17 @@ def sync_projects(db):
             "is_active": True,
         }
 
+        existing_by_slug = (
+            db.table("projects").select("id").eq("slug", slug).limit(1).execute()
+        )
         if existing.data:
             row_id = existing.data[0]["id"]
             db.table("projects").update(base).eq("id", row_id).execute()
             print(f"  [update] project: {name}")
+        elif existing_by_slug.data:
+            row_id = existing_by_slug.data[0]["id"]
+            db.table("projects").update(base).eq("id", row_id).execute()
+            print(f"  [update] project (by slug): {name}")
         else:
             db.table("projects").insert(base).execute()
             print(f"  [insert] project: {name}")
@@ -148,6 +164,8 @@ def sync_faqs(db):
           "- Inbox of Broken Dreams — AI that tags your Gmail job applications as ghosted / interview / rejected.\n"
           "- IsThisRealJob — scam detection for job posts via a trust score.\n"
           "- AI YouTube Agent — Sheet → prompt → Gemini → YouTube upload automation.\n"
+          "- Medicaid Analytics Agent — Amazon Nova hackathon project: chat with public Medicaid claims data (AWS Bedrock Nova + Snowflake).\n"
+          "- Ramudu-Sita — online Telugu party game with video/audio for family (quick 0→1 build).\n"
           "I treat these as my core portfolio projects outside of my job experience like Clinivise or SOTI."
         ),
         "topic": "projects"
@@ -190,11 +208,129 @@ def sync_faqs(db):
             print(f"  [insert] faq: {faq['slug']}")
 
 
+def _upsert_faq(db, slug: str, question: str, answer: str, topic: str):
+    existing = (
+        db.table("faqs").select("id").eq("slug", slug).limit(1).execute()
+    )
+    base = {
+        "slug": slug,
+        "question": question,
+        "answer": answer,
+        "topic": topic,
+        "is_active": True,
+    }
+    if existing.data:
+        db.table("faqs").update(base).eq("id", existing.data[0]["id"]).execute()
+        print(f"  [update] faq: {slug}")
+    else:
+        db.table("faqs").insert(base).execute()
+        print(f"  [insert] faq: {slug}")
+
+
+def _upsert_project_from_payload(db, payload: dict):
+    name = payload["name"]
+    slug = payload.get("slug") or slugify(name)
+    base = {
+        "slug": slug,
+        "name": name,
+        "category": payload.get("category"),
+        "status": payload.get("status"),
+        "one_liner": payload.get("one_liner"),
+        "problem": payload.get("problem"),
+        "solution": payload.get("solution"),
+        "stack": payload.get("stack"),
+        "focus_areas": payload.get("focus_areas"),
+        "why_it_matters": payload.get("why_it_matters"),
+        "is_active": True,
+    }
+    existing = (
+        db.table("projects").select("id").eq("slug", slug).limit(1).execute()
+    )
+    if existing.data:
+        db.table("projects").update(base).eq("id", existing.data[0]["id"]).execute()
+        print(f"  [update] project (from update): {name}")
+    else:
+        db.table("projects").insert(base).execute()
+        print(f"  [insert] project (from update): {name}")
+
+
+def _build_update_faq_answer(entry: dict) -> str:
+    g = entry.get("agent_guidance") or {}
+    lines = [
+        f"[Activity type: {entry.get('type')} | Entity: {entry.get('entity_kind', 'activity')}]",
+        entry.get("summary", ""),
+    ]
+    if entry.get("status"):
+        lines.append(f"Status: {entry['status']}.")
+    if entry.get("date"):
+        lines.append(f"Approx date: {entry['date']}.")
+    if entry.get("related_project_slug"):
+        lines.append(
+            f"Related portfolio project slug: {entry['related_project_slug']} "
+            "(use get_project_details for full project context)."
+        )
+    if g.get("clarify"):
+        lines.append(f"Clarify: {g['clarify']}")
+    if g.get("do_not_say"):
+        lines.append("Do not say: " + "; ".join(g["do_not_say"]))
+    if entry.get("links"):
+        for k, v in entry["links"].items():
+            lines.append(f"Link ({k}): {v}")
+    return "\n".join(lines)
+
+
+def sync_updates(db):
+    path = DATA_DIR / "updates.json"
+    data = load_json(path)
+    if not data:
+        return
+
+    entries = data.get("entries") or []
+    print(f"[info] Syncing {len(entries)} activity updates from {path} ...")
+
+    rollup_lines = []
+
+    for entry in entries:
+        eid = entry.get("id")
+        if not eid:
+            continue
+
+        if entry.get("project_payload"):
+            _upsert_project_from_payload(db, entry["project_payload"])
+
+        question = f"What is Nikhil's update: {entry.get('title', eid)}?"
+        answer = _build_update_faq_answer(entry)
+        topic = f"recent_{entry.get('type', 'activity')}"
+        _upsert_faq(db, f"update-{eid}", question, answer, topic)
+
+        rollup_lines.append(
+            f"- {entry.get('title')} ({entry.get('type')}, {entry.get('date', 'n/a')}): "
+            f"{entry.get('summary', '')[:200]}"
+        )
+
+    rollup_answer = (
+        "Recent activity (curated from LinkedIn and builds—not exhaustive):\n\n"
+        + "\n".join(rollup_lines)
+        + "\n\nFor hackathon questions, lead with Medicaid Analytics Agent (Amazon Nova 2026) "
+        "and mention winner-board recognition + AWS credits as outcomes of the same hackathon. "
+        "For 'what are you doing now', mention FlowHouse Cohort 1 (Prettiflow). "
+        "Do not claim Anthropic Claude certification—only a shared post about that program."
+    )
+    _upsert_faq(
+        db,
+        "recent-activity-summary",
+        "What has Nikhil been up to recently?",
+        rollup_answer,
+        "recent_summary",
+    )
+
+
 def main():
     db = get_supabase()
     sync_projects(db)
     sync_links(db)
     sync_faqs(db)
+    sync_updates(db)
     print("[done] Sync complete. Now run: python scripts/rebuild_chunks.py")
 
 
