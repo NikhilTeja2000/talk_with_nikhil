@@ -1,6 +1,6 @@
 # Talk with Nikhil — Project Overview (Low-Level)
 
-> **For humans and AI assistants:** Read this file first when you need how the app works end-to-end (audio flow, frontend/backend split, WebSockets, Supabase). Detailed schema and deployment notes live in [architecture.md](./architecture.md) and [deployment.md](./deployment.md).
+> **For humans and AI assistants:** Read [HANDOFF.md](./HANDOFF.md) first for prod URLs and ops context. Use this file for how the app works end-to-end (audio flow, frontend/backend split, WebSockets, Supabase). Schema and deployment: [architecture.md](./architecture.md), [deployment.md](./deployment.md).
 
 ## What this project is
 

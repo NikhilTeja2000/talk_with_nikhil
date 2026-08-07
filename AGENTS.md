@@ -1,10 +1,12 @@
 # Agent instructions — Talk with Nikhil
 
-Before exploring the codebase for architecture, audio flow, or WebSocket behavior, **read these docs first**:
+Before exploring the codebase, **read these docs in order**:
 
-1. **[docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md)** — Low-level map: routes, `/ws/voice` vs `/ws/live`, audio pipeline (16k in / 24k out), barge-in, backend modules, RAG, admin, env vars.
-2. **[docs/architecture.md](docs/architecture.md)** — Schema, layers, gap detection, V2 plans.
-3. **[docs/deployment.md](docs/deployment.md)** — Production deploy.
+1. **[docs/HANDOFF.md](docs/HANDOFF.md)** — Prod URLs, Supabase/Vercel/GCP context, eval scope, common tasks (start here for handoffs).
+2. **[docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md)** — Low-level map: routes, `/ws/voice` vs `/ws/live`, audio pipeline (16k in / 24k out), barge-in, backend modules, RAG, admin, env vars.
+3. **[docs/architecture.md](docs/architecture.md)** — Schema, layers, gap detection, V2 plans.
+4. **[docs/deployment.md](docs/deployment.md)** — Production deploy, cron keepalive.
+5. **[docs/knowledge-organization.md](docs/knowledge-organization.md)** — LinkedIn / `data/updates.json` → Supabase sync.
 
 ## Quick facts
 

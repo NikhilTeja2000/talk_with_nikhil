@@ -147,6 +147,8 @@ talk-with-nikhil/
 
 ## Architecture
 
-- **[docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md)** — Low-level overview (audio flow, frontend/backend, WebSockets). Start here.
+- **[docs/HANDOFF.md](docs/HANDOFF.md)** — Prod context, doc order, ops notes (for new agents / developers).
+- **[docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md)** — Low-level overview (audio flow, frontend/backend, WebSockets).
 - **[docs/architecture.md](docs/architecture.md)** — Full system architecture, database, env vars.
-- **[AGENTS.md](AGENTS.md)** — Pointer for AI assistants to use the docs above before spelunking code.
+- **[docs/knowledge-organization.md](docs/knowledge-organization.md)** — LinkedIn updates → Supabase.
+- **[AGENTS.md](AGENTS.md)** — Pointer for AI assistants; read HANDOFF.md first.
