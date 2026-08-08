@@ -45,7 +45,7 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
 
       const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-      addLine("> waking nikhil up...", "info");
+      addLine("> waking nikhil up.3..2..1..", "info");
       await delay(500);
       addLine("> loading his brain...", "info");
       await delay(400);
