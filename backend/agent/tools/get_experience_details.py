@@ -17,7 +17,12 @@ def get_experience_details(company_or_role: str) -> dict:
         query=company_or_role,
         hit_count=len(results),
         top_score=top_score,
+        chunks=[
+            {"id": r.id, "title": r.title, "source_type": r.chunk_type, "score": round(r.score, 3)}
+            for r in results
+        ],
     )
+
 
     if not results:
         return {

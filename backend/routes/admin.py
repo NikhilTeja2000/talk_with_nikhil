@@ -381,3 +381,21 @@ async def trigger_rebuild_chunks(_user: dict = Depends(require_admin)):
     except Exception as e:
         logger.error(f"Chunk rebuild failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/sessions/{session_id}/traces")
+async def get_session_traces(
+    session_id: str,
+    _user: dict = Depends(require_admin),
+):
+    """Get all turn traces for a specific session, ordered by turn_id."""
+    db = get_supabase()
+    result = (
+        db.table("turn_traces")
+        .select("*")
+        .eq("session_id", session_id)
+        .order("turn_id", desc=False)
+        .execute()
+    )
+    return {"traces": result.data or [], "count": len(result.data or [])}
+

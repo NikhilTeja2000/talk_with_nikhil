@@ -1,0 +1,8 @@
+{
+  "source_roots": ["backend"],
+  "search_paths": [
+    "backend",
+    "backend/.venv/lib/python3.9/site-packages"
+  ],
+  "site_package_path": "backend/.venv/lib/python3.9/site-packages"
+}
