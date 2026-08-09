@@ -268,7 +268,9 @@ async def handle_voice_session(ws: WebSocket):
                                                 hit_count=stat.hit_count,
                                                 top_score=stat.top_score,
                                                 duration_ms=duration_ms,
+                                                chunks=getattr(stat, "chunks", []),
                                             )
+
 
                                         await gemini_session.send(
                                             input=types.LiveClientToolResponse(

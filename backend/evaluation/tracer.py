@@ -73,6 +73,8 @@ class TurnContext:
         self.retrieval_events: list[RetrievalTrace] = []
         self.tool_calls: list[ToolTraceItem] = []
         self.guardrail_results: dict[str, Any] = {}
+        self._finalized = False
+        self._built_trace: TurnTrace | None = None
 
     def end_user_turn(self, user_text: str):
         """Mark when user finishes speaking / submits text."""
@@ -140,9 +142,13 @@ class TurnContext:
         interrupted: bool = False,
         error: str | None = None,
     ) -> TurnTrace:
-        """Construct the completed TurnTrace with calculated metrics."""
+        """Construct the completed TurnTrace with calculated metrics (idempotent)."""
+        if self._finalized and self._built_trace is not None:
+            return self._built_trace
+
         completed_at = datetime.now(timezone.utc)
         completed_perf = time.perf_counter()
+
 
         total_duration_ms = max(int((completed_perf - self.started_perf) * 1000), 0)
 
@@ -174,7 +180,7 @@ class TurnContext:
                 topic=getattr(gap_result, "topic", ""),
             )
 
-        return TurnTrace(
+        trace = TurnTrace(
             trace_id=self.trace_id,
             session_id=self.session_id,
             turn_id=self.turn_id,
@@ -200,6 +206,10 @@ class TurnContext:
             interrupted=interrupted,
             error=error,
         )
+        self._built_trace = trace
+        self._finalized = True
+        return trace
+
 
 
 class TraceCollector:

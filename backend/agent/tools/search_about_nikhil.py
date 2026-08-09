@@ -15,7 +15,12 @@ def search_about_nikhil(query: str) -> dict:
         query=query,
         hit_count=len(results),
         top_score=top_score,
+        chunks=[
+            {"id": r.id, "title": r.title, "source_type": r.chunk_type, "score": round(r.score, 3)}
+            for r in results
+        ],
     )
+
 
     if not results:
         return {"found": False, "message": "No relevant information found."}

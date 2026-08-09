@@ -40,11 +40,10 @@ CREATE INDEX idx_turn_traces_session_turn ON turn_traces(session_id, turn_id);
 CREATE INDEX idx_turn_traces_created ON turn_traces(created_at);
 CREATE INDEX idx_turn_traces_status ON turn_traces(status);
 
--- RLS: No public access. Backend service-role writes; authenticated admin reads.
+-- RLS: Private table. All access is controlled by backend FastAPI via service role.
+-- Authenticated admins query traces through GET /api/admin/sessions/{id}/traces.
 ALTER TABLE turn_traces ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "turn_traces_admin_read" ON turn_traces
-  FOR SELECT USING (auth.role() = 'authenticated');
+CREATE POLICY "turn_traces_service_role_all" ON turn_traces
+  FOR ALL TO service_role USING (true) WITH CHECK (true);
 
-CREATE POLICY "turn_traces_service_write" ON turn_traces
-  FOR ALL USING (auth.role() = 'service_role');

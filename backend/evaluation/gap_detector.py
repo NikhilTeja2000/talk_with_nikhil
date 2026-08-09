@@ -32,6 +32,7 @@ class RetrievalStats:
     hit_count: int = 0
     top_score: float = 0.0
     query: str = ""
+    chunks: list[dict] = field(default_factory=list)
 
 
 class RetrievalContext:
@@ -43,13 +44,20 @@ class RetrievalContext:
     def reset(self):
         self._local.stats_list = []
 
-    def record(self, query: str, hit_count: int, top_score: float):
+    def record(
+        self,
+        query: str,
+        hit_count: int,
+        top_score: float,
+        chunks: list[dict] | None = None,
+    ):
         if not hasattr(self._local, "stats_list"):
             self._local.stats_list = []
         self._local.stats_list.append(RetrievalStats(
             hit_count=hit_count,
             top_score=top_score,
             query=query,
+            chunks=chunks or [],
         ))
 
     def get_stats(self) -> list[RetrievalStats]:
@@ -63,6 +71,7 @@ class RetrievalContext:
 
 
 retrieval_context = RetrievalContext()
+
 
 
 @dataclass
