@@ -113,5 +113,22 @@ class ConversationStore:
                 "turn_count": (session.get("turn_count", 0) or 0) + 1,
             }).eq("id", session_id).execute()
 
+    async def insert_turn_trace(self, trace_dict: dict) -> dict:
+        """Insert a completed turn trace row into Supabase."""
+        result = self._db.table("turn_traces").insert(trace_dict).execute()
+        return result.data[0] if result.data else {}
+
+    async def get_session_traces(self, session_id: str) -> list[dict]:
+        """Fetch all turn traces for a given session, ordered by turn_id ascending."""
+        result = (
+            self._db.table("turn_traces")
+            .select("*")
+            .eq("session_id", session_id)
+            .order("turn_id", desc=False)
+            .execute()
+        )
+        return result.data or []
+
 
 conversation_store = ConversationStore()
+

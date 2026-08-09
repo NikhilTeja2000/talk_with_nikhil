@@ -56,13 +56,23 @@ app.include_router(admin_router)
 app.include_router(voice_router)
 
 
+from evaluation.tracer import trace_collector
+
 @app.on_event("startup")
 async def startup():
     logging.getLogger(__name__).info(
         f"Talk with Nikhil backend starting | env={settings.app_env}"
     )
+    trace_collector.start_worker()
+
+
+@app.on_event("shutdown")
+async def shutdown():
+    logging.getLogger(__name__).info("Talk with Nikhil backend stopping...")
+    await trace_collector.stop_worker()
 
 
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host=settings.host, port=settings.port, reload=True)
+

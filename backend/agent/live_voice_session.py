@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import base64
 import logging
+import time
 import uuid
 
 from fastapi import WebSocket
@@ -17,8 +18,7 @@ from agent.tools.get_timeline_event import get_timeline_event
 from agent.tools.get_links import get_links
 from agent.tools.get_preferences import get_preferences
 from config import settings
-from evaluation import retrieval_context
-from evaluation.gap_detector import gap_detector
+from evaluation import gap_detector, retrieval_context, trace_collector, TurnContext
 from storage.conversation_store import conversation_store
 
 logger = logging.getLogger(__name__)
@@ -93,7 +93,7 @@ def _build_tool_declarations() -> list[types.Tool]:
 
 
 async def handle_voice_session(ws: WebSocket):
-    """Bridge client WebSocket ↔ Gemini Live API for real-time voice."""
+    """Bridge client WebSocket ↔ Gemini Live API for real-time voice with non-blocking turn tracing."""
     session_id = str(uuid.uuid4())
 
     user_agent = ""
@@ -101,7 +101,8 @@ async def handle_voice_session(ws: WebSocket):
     for name, value in ws.headers.items():
         if name.lower() == "user-agent":
             user_agent = value
-    ip_address = ws.client.host if ws.client else ""
+    if ws.client:
+        ip_address = ws.client.host
 
     try:
         await conversation_store.create_session(session_id, user_agent, ip_address)
@@ -116,17 +117,15 @@ async def handle_voice_session(ws: WebSocket):
 
     config = types.LiveConnectConfig(
         response_modalities=[types.Modality.AUDIO],
+        speech_config=types.SpeechConfig(
+            voice_config=types.VoiceConfig(prebuilt_voice_config=types.PrebuiltVoiceConfig(voice_name="Puck"))
+        ),
+        output_audio_transcription=types.AudioTranscriptionConfig(),
+        input_audio_transcription=types.AudioTranscriptionConfig(),
         system_instruction=types.Content(
             parts=[types.Part(text=build_instructions())]
         ),
         tools=_build_tool_declarations(),
-        speech_config=types.SpeechConfig(
-            voice_config=types.VoiceConfig(
-                prebuilt_voice_config=types.PrebuiltVoiceConfig(voice_name="Puck")
-            )
-        ),
-        output_audio_transcription=types.AudioTranscriptionConfig(),
-        input_audio_transcription=types.AudioTranscriptionConfig(),
     )
 
     await ws.send_json({"type": "session.ready", "session_id": session_id})
@@ -136,6 +135,14 @@ async def handle_voice_session(ws: WebSocket):
     last_user_text = ""
     audio_chunks_sent = 0
     audio_chunks_received = 0
+    turn_count = 1
+
+    # Turn tracking context for observability
+    turn_ctx = TurnContext(
+        session_id=session_id,
+        turn_id=turn_count,
+        model=settings.gemini_voice_model,
+    )
 
     try:
         logger.info(f"[{session_id[:8]}] Connecting to Gemini Live: {settings.gemini_voice_model}")
@@ -146,7 +153,7 @@ async def handle_voice_session(ws: WebSocket):
 
             async def reader():
                 """Client WebSocket → Gemini."""
-                nonlocal last_user_text, audio_chunks_sent
+                nonlocal last_user_text, audio_chunks_sent, turn_ctx
                 try:
                     while True:
                         msg = await ws.receive_json()
@@ -173,6 +180,7 @@ async def handle_voice_session(ws: WebSocket):
                         elif msg_type == "transcript.user":
                             text = msg.get("content", "")
                             last_user_text = text
+                            turn_ctx.end_user_turn(text)
                             logger.info(f"[{session_id[:8]}] User typed: {text[:80]}")
                             try:
                                 await conversation_store.add_transcript(session_id, "user", text)
@@ -198,15 +206,13 @@ async def handle_voice_session(ws: WebSocket):
 
             async def writer():
                 """Gemini → client WebSocket."""
-                nonlocal accumulated_text, last_user_text, audio_chunks_received
+                nonlocal accumulated_text, last_user_text, audio_chunks_received, turn_count, turn_ctx
                 response_count = 0
-                turn_count = 0
                 # When True, audio forwarding is suppressed until the next turn starts.
                 # Set on barge-in (sc.interrupted); cleared at the top of each new turn.
                 forwarding_suppressed = False
                 try:
                     while True:
-                        turn_count += 1
                         # New turn starts — lift the suppression gate so the new answer plays.
                         forwarding_suppressed = False
                         logger.info(f"[{session_id[:8]}] Starting receive() for turn {turn_count}")
@@ -226,16 +232,44 @@ async def handle_voice_session(ws: WebSocket):
                                 logger.info(f"[{session_id[:8]}] Tool call cancelled")
 
                             if response.tool_call:
+                                turn_ctx.start_model_turn()
                                 for fc in response.tool_call.function_calls:
                                     logger.info(f"[{session_id[:8]}] Tool call: {fc.name}({dict(fc.args)})")
                                     fn = TOOL_MAP.get(fc.name)
                                     if fn:
                                         retrieval_context.reset()
+                                        t_tool_start = time.perf_counter()
                                         try:
                                             result = fn(**dict(fc.args))
+                                            duration_ms = max(int((time.perf_counter() - t_tool_start) * 1000), 0)
+                                            tool_status = "error" if isinstance(result, dict) and "error" in result else "success"
+                                            tool_error = result.get("error") if tool_status == "error" else None
                                         except Exception as e:
+                                            duration_ms = max(int((time.perf_counter() - t_tool_start) * 1000), 0)
                                             result = {"error": str(e)}
+                                            tool_status = "error"
+                                            tool_error = str(e)
                                             logger.warning(f"[{session_id[:8]}] Tool error: {e}")
+
+                                        # Record tool execution in trace
+                                        turn_ctx.record_tool_call(
+                                            tool_name=fc.name,
+                                            args=dict(fc.args),
+                                            result_summary=result,
+                                            duration_ms=duration_ms,
+                                            status=tool_status,
+                                            error=tool_error,
+                                        )
+
+                                        # Record any retrieval events captured by the tool
+                                        for stat in retrieval_context.get_stats():
+                                            turn_ctx.record_retrieval(
+                                                query=stat.query,
+                                                hit_count=stat.hit_count,
+                                                top_score=stat.top_score,
+                                                duration_ms=duration_ms,
+                                            )
+
                                         await gemini_session.send(
                                             input=types.LiveClientToolResponse(
                                                 function_responses=[
@@ -249,6 +283,14 @@ async def handle_voice_session(ws: WebSocket):
                                         )
                                     else:
                                         logger.warning(f"[{session_id[:8]}] Unknown tool: {fc.name}")
+                                        turn_ctx.record_tool_call(
+                                            tool_name=fc.name,
+                                            args=dict(fc.args),
+                                            result_summary={"error": "unknown_tool"},
+                                            duration_ms=0,
+                                            status="error",
+                                            error="unknown_tool",
+                                        )
 
                             if response.server_content:
                                 sc = response.server_content
@@ -259,16 +301,35 @@ async def handle_voice_session(ws: WebSocket):
                                 if sc.interrupted:
                                     logger.info(f"[{session_id[:8]}] Gemini interrupted (barge-in)")
                                     forwarding_suppressed = True
+
+                                    # Emit interrupted trace non-blocking
+                                    interrupted_trace = turn_ctx.build_trace(
+                                        assistant_output=accumulated_text,
+                                        status="interrupted",
+                                        interrupted=True,
+                                    )
+                                    trace_collector.enqueue_trace(interrupted_trace)
+
                                     accumulated_text = ""
                                     audio_chunks_received = 0
                                     await ws.send_json({"type": "interrupted"})
+
+                                    # Advance turn context for next turn
+                                    turn_count += 1
+                                    turn_ctx = TurnContext(
+                                        session_id=session_id,
+                                        turn_id=turn_count,
+                                        model=settings.gemini_voice_model,
+                                    )
                                     # Skip remaining processing for this response object.
                                     continue
 
                                 # Only forward audio when not suppressed (i.e. no active barge-in).
                                 if not forwarding_suppressed and sc.model_turn:
+                                    turn_ctx.start_model_turn()
                                     for part in sc.model_turn.parts:
                                         if part.inline_data and part.inline_data.data:
+                                            turn_ctx.record_first_audio()
                                             audio_b64 = base64.b64encode(
                                                 part.inline_data.data
                                             ).decode()
@@ -285,6 +346,7 @@ async def handle_voice_session(ws: WebSocket):
                                 if sc.input_transcription and sc.input_transcription.text:
                                     user_text = sc.input_transcription.text
                                     last_user_text = user_text
+                                    turn_ctx.end_user_turn(user_text)
                                     logger.info(f"[{session_id[:8]}] User said: {user_text[:80]}")
                                     await ws.send_json({
                                         "type": "transcript.final",
@@ -311,6 +373,7 @@ async def handle_voice_session(ws: WebSocket):
                                             "speaker": "ai",
                                             "content": accumulated_text,
                                         })
+                                        gap_result = None
                                         try:
                                             await conversation_store.add_transcript(
                                                 session_id, "ai", accumulated_text
@@ -332,9 +395,27 @@ async def handle_voice_session(ws: WebSocket):
                                                 )
                                         except Exception as e:
                                             logger.warning(f"Failed to persist AI response: {e}")
+
+                                        # Build complete trace and non-blocking enqueue
+                                        trace = turn_ctx.build_trace(
+                                            assistant_output=accumulated_text,
+                                            gap_result=gap_result,
+                                            status="success",
+                                        )
+                                        trace_collector.enqueue_trace(trace)
+
                                         accumulated_text = ""
                                         last_user_text = ""
+
                                     audio_chunks_received = 0
+
+                                    # Advance turn context for the next turn
+                                    turn_count += 1
+                                    turn_ctx = TurnContext(
+                                        session_id=session_id,
+                                        turn_id=turn_count,
+                                        model=settings.gemini_voice_model,
+                                    )
 
                         logger.info(f"[{session_id[:8]}] receive() iterator ended for turn {turn_count}, restarting...")
 
