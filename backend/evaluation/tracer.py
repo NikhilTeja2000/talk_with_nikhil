@@ -9,12 +9,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from evaluation.trace_models import (
+from .trace_models import (
     GapTrace,
     RetrievalTrace,
     ToolTraceItem,
     TurnTrace,
 )
+
 
 logger = logging.getLogger(__name__)
 

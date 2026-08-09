@@ -1,0 +1,22 @@
+[project]
+name = "talk-with-nikhil"
+version = "0.1.0"
+description = "Talk with Nikhil Voice Agent"
+requires-python = ">=3.9"
+
+[tool.pyrefly]
+source-roots = ["backend"]
+search-paths = [
+    "backend",
+    "backend/.venv/lib/python3.9/site-packages"
+]
+site-package-path = "backend/.venv/lib/python3.9/site-packages"
+
+[tool.pyright]
+include = ["backend"]
+extraPaths = [
+    "backend",
+    "backend/.venv/lib/python3.9/site-packages"
+]
+venvPath = "backend"
+venv = ".venv"
